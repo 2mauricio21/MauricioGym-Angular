@@ -1,0 +1,35 @@
+<div class="main-layout" [class.sidebar-hidden]="!sidebarVisible" [class.mobile]="isMobile">
+  <!-- Navbar -->
+  <app-navbar
+    class="layout-navbar"
+    [currentUser]="currentUser"
+    [sidebarVisible]="sidebarVisible"
+    (toggleSidebar)="onToggleSidebar()"
+  ></app-navbar>
+
+  <!-- Sidebar -->
+  <app-sidebar
+    class="layout-sidebar"
+    [visible]="sidebarVisible"
+    [currentUser]="currentUser"
+    [isMobile]="isMobile"
+    (sidebarHide)="onSidebarHide()"
+  ></app-sidebar>
+
+  <!-- Main Content -->
+  <main class="layout-main">
+    <div class="main-content">
+      <router-outlet></router-outlet>
+    </div>
+    
+    <!-- Footer -->
+    <app-footer class="layout-footer"></app-footer>
+  </main>
+
+  <!-- Mobile Overlay -->
+  <div 
+    class="mobile-overlay" 
+    *ngIf="isMobile && sidebarVisible"
+    (click)="onSidebarHide()"
+  ></div>
+</div>
