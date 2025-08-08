@@ -1,0 +1,28 @@
+<!-- Global Loading Spinner -->
+<div *ngIf="isLoading" class="global-loading">
+  <div class="loading-backdrop">
+    <div class="loading-content">
+      <p-progressSpinner 
+        styleClass="custom-spinner"
+        strokeWidth="3"
+        animationDuration="1s">
+      </p-progressSpinner>
+      <p class="loading-text">Carregando...</p>
+    </div>
+  </div>
+</div>
+
+<!-- Main Application Content -->
+<div class="app-container" [class.app-loading]="isLoading">
+  <router-outlet></router-outlet>
+</div>
+
+<!-- Global Toast Messages -->
+<p-toast 
+  position="top-right"
+  [life]="5000"
+  [showTransformOptions]="'translateX(100%)'"
+  [hideTransformOptions]="'translateX(100%)'"
+  [showTransitionOptions]="'300ms ease-out'"
+  [hideTransitionOptions]="'250ms ease-in'">
+</p-toast>
