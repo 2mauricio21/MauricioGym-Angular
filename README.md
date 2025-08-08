@@ -217,7 +217,6 @@ Se você encontrar algum problema ou tiver dúvidas:
 
 - 🐛 [Reporte bugs](https://github.com/2mauricio21/MauricioGym-Angular/issues)
 - 💡 [Solicite features](https://github.com/2mauricio21/MauricioGym-Angular/issues)
-- 📧 Entre em contato: mauricio@exemplo.com
 
 ---
 
