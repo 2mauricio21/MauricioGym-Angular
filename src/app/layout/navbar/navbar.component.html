@@ -1,0 +1,86 @@
+<nav class="navbar">
+  <div class="navbar-content">
+    <!-- Left Section -->
+    <div class="navbar-left">
+      <!-- Sidebar Toggle -->
+      <p-button
+        icon="pi pi-bars"
+        (click)="onToggleSidebar()"
+        [text]="true"
+        size="large"
+        class="sidebar-toggle"
+        pTooltip="Toggle Menu"
+        tooltipPosition="bottom"
+      ></p-button>
+
+      <!-- Logo -->
+      <div class="navbar-logo" (click)="goToHome()">
+        <i class="pi pi-dumbbell logo-icon"></i>
+        <span class="logo-text">MauricioGym</span>
+      </div>
+    </div>
+
+    <!-- Right Section -->
+    <div class="navbar-right">
+      <!-- Notifications -->
+      <div class="notification-wrapper">
+        <p-button
+          icon="pi pi-bell"
+          (click)="goToNotifications()"
+          [text]="true"
+          size="large"
+          class="notification-btn"
+          pTooltip="Notificações"
+          tooltipPosition="bottom"
+        ></p-button>
+        <p-badge
+          *ngIf="notificationCount > 0"
+          [value]="notificationCount.toString()"
+          severity="danger"
+          class="notification-badge"
+        ></p-badge>
+      </div>
+
+      <!-- User Menu -->
+      <div class="user-menu">
+        <div class="user-info" (click)="userMenu.toggle($event)">
+          <div class="user-details">
+            <span class="user-name">{{ currentUser?.nomeCompleto || 'Usuário' }}</span>
+            <span class="user-role" [style.color]="getUserRoleColor()">
+              {{ getUserRoleLabel() }}
+            </span>
+          </div>
+          <p-avatar
+            [label]="getUserInitials()"
+            shape="circle"
+            size="normal"
+            styleClass="user-avatar"
+          ></p-avatar>
+          <i class="pi pi-chevron-down user-chevron"></i>
+        </div>
+
+        <p-overlayPanel #userMenu styleClass="user-overlay-panel">
+          <div class="user-panel-header">
+            <p-avatar
+              [label]="getUserInitials()"
+              shape="circle"
+              size="large"
+              styleClass="user-avatar-large"
+            ></p-avatar>
+            <div class="user-panel-info">
+              <h4 class="user-panel-name">{{ currentUser?.nomeCompleto || 'Usuário' }}</h4>
+              <p class="user-panel-email">{{ currentUser?.email || '' }}</p>
+              <span class="user-panel-role" [style.color]="getUserRoleColor()">
+                {{ getUserRoleLabel() }}
+              </span>
+            </div>
+          </div>
+          
+          <div class="user-panel-menu">
+            <p-menu [model]="userMenuItems" [popup]="false"></p-menu>
+          </div>
+        </p-overlayPanel>
+      </div>
+    </div>
+  </div>
+</nav>
