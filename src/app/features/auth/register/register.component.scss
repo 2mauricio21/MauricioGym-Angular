@@ -1,0 +1,344 @@
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 1rem;
+}
+
+.register-wrapper {
+  width: 100%;
+  max-width: 600px;
+}
+
+.register-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: white;
+
+  .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+
+    i {
+      font-size: 2.5rem;
+      color: #ffd700;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0;
+      color: white;
+    }
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin: 0;
+  }
+}
+
+.register-card {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border-radius: 1rem;
+  border: none;
+  background: white;
+
+  :host ::ng-deep .p-card-body {
+    padding: 2rem;
+  }
+
+  :host ::ng-deep .p-card-content {
+    padding: 0;
+  }
+}
+
+.register-form {
+  .form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+
+    .form-group {
+      flex: 1;
+
+      &.col-md-6 {
+        flex: 0 0 calc(50% - 0.5rem);
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #374151;
+        font-size: 0.875rem;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+
+        &:focus {
+          outline: none;
+          border-color: #667eea;
+          box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        &.is-invalid {
+          border-color: #ef4444;
+          box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+      }
+
+      .invalid-feedback {
+        display: block;
+        color: #ef4444;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+      }
+    }
+  }
+
+  .form-actions {
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+
+    .register-button {
+      :host ::ng-deep .p-button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        border-radius: 0.5rem;
+        transition: all 0.2s ease;
+
+        &:hover:not(:disabled) {
+          transform: translateY(-1px);
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+}
+
+.register-footer {
+  text-align: center;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+
+  .login-text {
+    margin: 0;
+    color: #6b7280;
+    font-size: 0.875rem;
+
+    .login-link {
+      background: none;
+      border: none;
+      color: #667eea;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      margin-left: 0.25rem;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: #5a67d8;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// PrimeNG component styling
+:host ::ng-deep {
+  // Password component
+  .p-password {
+    width: 100%;
+
+    .p-inputtext {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+
+      &:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      &.is-invalid {
+        border-color: #ef4444;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+      }
+    }
+
+    .p-password-toggle {
+      color: #6b7280;
+      
+      &:hover {
+        color: #374151;
+      }
+    }
+  }
+
+  // InputMask component
+  .p-inputmask {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    &.is-invalid {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+  }
+
+  // Calendar component
+  .p-calendar {
+    .p-inputtext {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+
+      &:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      &.is-invalid {
+        border-color: #ef4444;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+      }
+    }
+
+    .p-datepicker-trigger {
+      color: #6b7280;
+      
+      &:hover {
+        color: #374151;
+      }
+    }
+  }
+
+  // Dropdown component
+  .p-dropdown {
+    .p-dropdown-label {
+      padding: 0.75rem 1rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+    }
+
+    &:not(.p-disabled):hover .p-dropdown-label {
+      border-color: #9ca3af;
+    }
+
+    &.p-focus .p-dropdown-label {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    &.is-invalid .p-dropdown-label {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+
+    .p-dropdown-trigger {
+      color: #6b7280;
+      
+      &:hover {
+        color: #374151;
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .register-container {
+    padding: 0.5rem;
+  }
+
+  .register-wrapper {
+    max-width: 100%;
+  }
+
+  .register-header {
+    margin-bottom: 1.5rem;
+
+    .logo {
+      h1 {
+        font-size: 1.75rem;
+      }
+
+      i {
+        font-size: 2rem;
+      }
+    }
+  }
+
+  .register-card {
+    :host ::ng-deep .p-card-body {
+      padding: 1.5rem;
+    }
+  }
+
+  .register-form {
+    .form-row {
+      flex-direction: column;
+      gap: 0;
+
+      .form-group {
+        &.col-md-6 {
+          flex: 1;
+          margin-bottom: 1.5rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .register-card {
+    :host ::ng-deep .p-card-body {
+      padding: 1rem;
+    }
+  }
+}

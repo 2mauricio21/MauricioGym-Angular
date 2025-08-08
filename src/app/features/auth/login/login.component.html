@@ -1,0 +1,89 @@
+<div class="login-container">
+  <div class="login-wrapper">
+    <div class="login-header">
+      <div class="logo">
+        <i class="pi pi-dumbbell"></i>
+        <h1>MauricioGym</h1>
+      </div>
+      <p class="subtitle">Faça login para acessar sua conta</p>
+    </div>
+
+    <p-card class="login-card">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+        <div class="form-group">
+          <label for="email" class="form-label">Email</label>
+          <input
+            pInputText
+            id="email"
+            formControlName="email"
+            placeholder="Digite seu email"
+            class="form-control"
+            [class.is-invalid]="isFieldInvalid('email')"
+            autocomplete="email"
+          />
+          <div class="invalid-feedback" *ngIf="isFieldInvalid('email')">
+            {{ getFieldError('email') }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="form-label">Senha</label>
+          <p-password
+            formControlName="password"
+            placeholder="Digite sua senha"
+            [toggleMask]="true"
+            [feedback]="false"
+            styleClass="w-100"
+            inputStyleClass="form-control"
+            [class.is-invalid]="isFieldInvalid('password')"
+            autocomplete="current-password"
+          ></p-password>
+          <div class="invalid-feedback" *ngIf="isFieldInvalid('password')">
+            {{ getFieldError('password') }}
+          </div>
+        </div>
+
+        <div class="form-options">
+          <div class="remember-me">
+            <p-checkbox
+              formControlName="rememberMe"
+              inputId="rememberMe"
+              label="Lembrar de mim"
+            ></p-checkbox>
+          </div>
+          <button
+            type="button"
+            class="forgot-password-link"
+            (click)="onForgotPassword()"
+          >
+            Esqueceu a senha?
+          </button>
+        </div>
+
+        <div class="form-actions">
+          <p-button
+            type="submit"
+            label="Entrar"
+            icon="pi pi-sign-in"
+            [loading]="loading"
+            [disabled]="loginForm.invalid"
+            styleClass="w-100 login-button"
+          ></p-button>
+        </div>
+      </form>
+
+      <div class="login-footer">
+        <p class="register-text">
+          Não tem uma conta?
+          <button
+            type="button"
+            class="register-link"
+            (click)="onRegister()"
+          >
+            Cadastre-se
+          </button>
+        </p>
+      </div>
+    </p-card>
+  </div>
+</div> 

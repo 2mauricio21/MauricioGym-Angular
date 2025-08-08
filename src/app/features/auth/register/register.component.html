@@ -1,0 +1,173 @@
+<div class="register-container">
+  <div class="register-wrapper">
+    <div class="register-header">
+      <div class="logo">
+        <i class="pi pi-dumbbell"></i>
+        <h1>MauricioGym</h1>
+      </div>
+      <p class="subtitle">Crie sua conta para começar</p>
+    </div>
+
+    <p-card class="register-card">
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nome" class="form-label">Nome Completo</label>
+            <input
+              pInputText
+              id="nome"
+              formControlName="nome"
+              placeholder="Digite seu nome completo"
+              class="form-control"
+              [class.is-invalid]="isFieldInvalid('nome')"
+              autocomplete="name"
+            />
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('nome')">
+              {{ getFieldError('nome') }}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email" class="form-label">Email</label>
+            <input
+              pInputText
+              id="email"
+              formControlName="email"
+              placeholder="Digite seu email"
+              class="form-control"
+              [class.is-invalid]="isFieldInvalid('email')"
+              autocomplete="email"
+            />
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('email')">
+              {{ getFieldError('email') }}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="cpf" class="form-label">CPF</label>
+            <p-inputMask
+              formControlName="cpf"
+              mask="999.999.999-99"
+              placeholder="000.000.000-00"
+              styleClass="form-control"
+              [class.is-invalid]="isFieldInvalid('cpf')"
+            ></p-inputMask>
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('cpf')">
+              {{ getFieldError('cpf') }}
+            </div>
+          </div>
+
+          <div class="form-group col-md-6">
+            <label for="telefone" class="form-label">Telefone</label>
+            <p-inputMask
+              formControlName="telefone"
+              mask="(99) 99999-9999"
+              placeholder="(00) 00000-0000"
+              styleClass="form-control"
+              [class.is-invalid]="isFieldInvalid('telefone')"
+            ></p-inputMask>
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('telefone')">
+              {{ getFieldError('telefone') }}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="dataNascimento" class="form-label">Data de Nascimento</label>
+            <p-calendar
+              formControlName="dataNascimento"
+              placeholder="dd/mm/aaaa"
+              dateFormat="dd/mm/yy"
+              [showIcon]="true"
+              styleClass="w-100"
+              inputStyleClass="form-control"
+              [class.is-invalid]="isFieldInvalid('dataNascimento')"
+            ></p-calendar>
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('dataNascimento')">
+              {{ getFieldError('dataNascimento') }}
+            </div>
+          </div>
+
+          <div class="form-group col-md-6">
+            <label for="tipoUsuario" class="form-label">Tipo de Usuário</label>
+            <p-dropdown
+              formControlName="tipoUsuario"
+              [options]="tiposUsuario"
+              placeholder="Selecione o tipo"
+              styleClass="w-100"
+              [class.is-invalid]="isFieldInvalid('tipoUsuario')"
+            ></p-dropdown>
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('tipoUsuario')">
+              {{ getFieldError('tipoUsuario') }}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="password" class="form-label">Senha</label>
+            <p-password
+              formControlName="password"
+              placeholder="Digite sua senha"
+              [toggleMask]="true"
+              [feedback]="true"
+              styleClass="w-100"
+              inputStyleClass="form-control"
+              [class.is-invalid]="isFieldInvalid('password')"
+              autocomplete="new-password"
+            ></p-password>
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('password')">
+              {{ getFieldError('password') }}
+            </div>
+          </div>
+
+          <div class="form-group col-md-6">
+            <label for="confirmPassword" class="form-label">Confirmar Senha</label>
+            <p-password
+              formControlName="confirmPassword"
+              placeholder="Confirme sua senha"
+              [toggleMask]="true"
+              [feedback]="false"
+              styleClass="w-100"
+              inputStyleClass="form-control"
+              [class.is-invalid]="isFieldInvalid('confirmPassword')"
+              autocomplete="new-password"
+            ></p-password>
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('confirmPassword')">
+              {{ getFieldError('confirmPassword') }}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <p-button
+            type="submit"
+            label="Criar Conta"
+            icon="pi pi-user-plus"
+            [loading]="loading"
+            [disabled]="registerForm.invalid"
+            styleClass="w-100 register-button"
+          ></p-button>
+        </div>
+      </form>
+
+      <div class="register-footer">
+        <p class="login-text">
+          Já tem uma conta?
+          <button
+            type="button"
+            class="login-link"
+            (click)="onLogin()"
+          >
+            Faça login
+          </button>
+        </p>
+      </div>
+    </p-card>
+  </div>
+</div>
