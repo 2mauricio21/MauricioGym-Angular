@@ -1,0 +1,257 @@
+.academia-detail {
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    
+    .title-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      
+      h1 {
+        margin: 0;
+        color: var(--text-color);
+        font-size: 2rem;
+        font-weight: 600;
+      }
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+    }
+  }
+
+  .content-section {
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      
+      .info-card {
+        &.full-width {
+          grid-column: 1 / -1;
+        }
+        
+        .info-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.75rem 0;
+          border-bottom: 1px solid var(--surface-border);
+          
+          &:last-child {
+            border-bottom: none;
+          }
+          
+          label {
+            font-weight: 600;
+            color: var(--text-color-secondary);
+            min-width: 120px;
+          }
+          
+          span {
+            color: var(--text-color);
+            text-align: right;
+            flex: 1;
+          }
+        }
+        
+        .observacoes-text {
+          margin: 0;
+          line-height: 1.6;
+          color: var(--text-color);
+        }
+      }
+    }
+    
+    .stats-section {
+      h2 {
+        margin-bottom: 1rem;
+        color: var(--text-color);
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+      
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        
+        .stat-card {
+          background: var(--surface-card);
+          border-radius: 8px;
+          padding: 1.5rem;
+          text-align: center;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          border: 1px solid var(--surface-border);
+          
+          .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+          }
+          
+          .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-color-secondary);
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  }
+}
+
+.loading-state,
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+  
+  i {
+    margin-bottom: 1rem;
+  }
+  
+  h3 {
+    margin: 0.5rem 0;
+    color: var(--text-color);
+  }
+  
+  p {
+    margin-bottom: 1.5rem;
+    color: var(--text-color-secondary);
+  }
+}
+
+.text-muted {
+  color: var(--text-color-secondary);
+  font-style: italic;
+}
+
+// Responsividade
+@media (max-width: 768px) {
+  .academia-detail {
+    padding: 1rem;
+    
+    .header-section {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: stretch;
+      
+      .title-section {
+        text-align: center;
+        
+        h1 {
+          font-size: 1.5rem;
+        }
+      }
+      
+      .action-buttons {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+    }
+    
+    .content-section {
+      .info-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        
+        .info-card.full-width {
+          grid-column: 1;
+        }
+        
+        .info-item {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.25rem;
+          
+          label {
+            min-width: auto;
+          }
+          
+          span {
+            text-align: left;
+          }
+        }
+      }
+      
+      .stats-section {
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+          
+          .stat-card {
+            padding: 1rem;
+            
+            .stat-value {
+              font-size: 1.5rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .academia-detail {
+    padding: 0.5rem;
+    
+    .header-section {
+      .title-section h1 {
+        font-size: 1.25rem;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+        
+        button {
+          width: 100%;
+        }
+      }
+    }
+    
+    .content-section {
+      .stats-section {
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    }
+  }
+  
+  .loading-state,
+  .error-state {
+    padding: 2rem 1rem;
+  }
+}
+
+// Melhorias visuais
+.info-card {
+  transition: box-shadow 0.3s ease;
+  
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.stat-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}

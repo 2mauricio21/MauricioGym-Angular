@@ -1,0 +1,167 @@
+.academia-form {
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    
+    h1 {
+      margin: 0;
+      color: var(--text-color);
+      font-size: 2rem;
+      font-weight: 600;
+    }
+  }
+
+  .form-section {
+    background: var(--surface-card);
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        
+        &.full-width {
+          grid-column: 1 / -1;
+        }
+        
+        label {
+          margin-bottom: 0.5rem;
+          font-weight: 600;
+          color: var(--text-color);
+          font-size: 0.875rem;
+        }
+        
+        input,
+        textarea,
+        p-dropdown,
+        p-calendar {
+          width: 100%;
+        }
+        
+        .p-error {
+          margin-top: 0.25rem;
+          font-size: 0.75rem;
+        }
+        
+        .ng-invalid.ng-touched {
+          border-color: var(--red-500);
+        }
+      }
+    }
+    
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--surface-border);
+      
+      button {
+        min-width: 120px;
+      }
+    }
+  }
+}
+
+// Responsividade
+@media (max-width: 768px) {
+  .academia-form {
+    padding: 1rem;
+    
+    .header-section {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: stretch;
+      
+      h1 {
+        text-align: center;
+        font-size: 1.5rem;
+      }
+    }
+    
+    .form-section {
+      padding: 1.5rem;
+      
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        
+        .form-group.full-width {
+          grid-column: 1;
+        }
+      }
+      
+      .form-actions {
+        flex-direction: column;
+        
+        button {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .academia-form {
+    padding: 0.5rem;
+    
+    .header-section h1 {
+      font-size: 1.25rem;
+    }
+    
+    .form-section {
+      padding: 1rem;
+      
+      .form-grid {
+        gap: 0.75rem;
+      }
+    }
+  }
+}
+
+// Estados de validação
+.p-inputtext.ng-invalid.ng-touched,
+.p-dropdown.ng-invalid.ng-touched .p-dropdown-label,
+.p-calendar.ng-invalid.ng-touched .p-inputtext {
+  border-color: var(--red-500) !important;
+}
+
+// Melhorias visuais
+.form-group {
+  .p-dropdown {
+    .p-dropdown-label {
+      padding: 0.75rem;
+    }
+  }
+  
+  .p-calendar {
+    .p-inputtext {
+      padding: 0.75rem;
+    }
+  }
+  
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+}
+
+// Loading state
+.form-actions button[loading] {
+  pointer-events: none;
+  opacity: 0.7;
+}
