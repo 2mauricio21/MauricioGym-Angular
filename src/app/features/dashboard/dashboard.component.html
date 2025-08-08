@@ -1,0 +1,283 @@
+<div class="dashboard-container">
+  <!-- Header Section -->
+  <div class="dashboard-header">
+    <div class="welcome-section">
+      <h1 class="welcome-title">
+        Bem-vindo, {{ currentUser?.nome || 'Usuário' }}!
+      </h1>
+      <p class="welcome-subtitle">
+        Aqui está um resumo das atividades do MauricioGym
+      </p>
+    </div>
+    <div class="header-actions">
+      <p-button
+        icon="pi pi-refresh"
+        label="Atualizar"
+        (click)="refreshData()"
+        [loading]="loading"
+        severity="secondary"
+        size="small"
+      ></p-button>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <p-card class="stat-card usuarios-card">
+      <div class="stat-content">
+        <div class="stat-icon">
+          <i class="pi pi-users"></i>
+        </div>
+        <div class="stat-info">
+          <h3 class="stat-number">
+            <ng-container *ngIf="!loading; else loadingSkeleton">
+              {{ stats?.totalUsuarios || 0 }}
+            </ng-container>
+            <ng-template #loadingSkeleton>
+              <p-skeleton width="60px" height="2rem"></p-skeleton>
+            </ng-template>
+          </h3>
+          <p class="stat-label">Total de Usuários</p>
+          <p class="stat-detail">
+            <ng-container *ngIf="!loading">
+              {{ stats?.usuariosAtivos || 0 }} ativos
+            </ng-container>
+          </p>
+        </div>
+      </div>
+    </p-card>
+
+    <p-card class="stat-card academias-card">
+      <div class="stat-content">
+        <div class="stat-icon">
+          <i class="pi pi-building"></i>
+        </div>
+        <div class="stat-info">
+          <h3 class="stat-number">
+            <ng-container *ngIf="!loading; else loadingSkeleton">
+              {{ stats?.totalAcademias || 0 }}
+            </ng-container>
+          </h3>
+          <p class="stat-label">Total de Academias</p>
+          <p class="stat-detail">
+            <ng-container *ngIf="!loading">
+              {{ stats?.academiasAtivas || 0 }} ativas
+            </ng-container>
+          </p>
+        </div>
+      </div>
+    </p-card>
+
+    <p-card class="stat-card planos-card">
+      <div class="stat-content">
+        <div class="stat-icon">
+          <i class="pi pi-credit-card"></i>
+        </div>
+        <div class="stat-info">
+          <h3 class="stat-number">
+            <ng-container *ngIf="!loading; else loadingSkeleton">
+              {{ stats?.totalPlanos || 0 }}
+            </ng-container>
+          </h3>
+          <p class="stat-label">Total de Planos</p>
+          <p class="stat-detail">
+            <ng-container *ngIf="!loading">
+              {{ stats?.planosAtivos || 0 }} ativos
+            </ng-container>
+          </p>
+        </div>
+      </div>
+    </p-card>
+
+    <p-card class="stat-card pagamentos-card">
+      <div class="stat-content">
+        <div class="stat-icon">
+          <i class="pi pi-dollar"></i>
+        </div>
+        <div class="stat-info">
+          <h3 class="stat-number">
+            <ng-container *ngIf="!loading; else loadingSkeleton">
+              {{ stats?.totalPagamentos || 0 }}
+            </ng-container>
+          </h3>
+          <p class="stat-label">Total de Pagamentos</p>
+          <p class="stat-detail">
+            <ng-container *ngIf="!loading">
+              {{ stats?.pagamentosRecentes || 0 }} recentes
+            </ng-container>
+          </p>
+        </div>
+      </div>
+    </p-card>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="content-grid">
+    <!-- Chart Section -->
+    <div class="chart-section">
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="card-header">
+            <h3>Visão Geral</h3>
+            <p>Distribuição de usuários e academias</p>
+          </div>
+        </ng-template>
+        
+        <div class="chart-container">
+          <ng-container *ngIf="!loading && chartData; else chartSkeleton">
+            <p-chart
+              type="doughnut"
+              [data]="chartData"
+              [options]="chartOptions"
+              [responsive]="true"
+              height="300px"
+            ></p-chart>
+          </ng-container>
+          <ng-template #chartSkeleton>
+            <div class="chart-skeleton">
+              <p-skeleton shape="circle" size="200px"></p-skeleton>
+            </div>
+          </ng-template>
+        </div>
+      </p-card>
+    </div>
+
+    <!-- Recent Users Section -->
+    <div class="recent-users-section">
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="card-header">
+            <h3>Usuários Recentes</h3>
+            <p-button
+              icon="pi pi-external-link"
+              label="Ver Todos"
+              routerLink="/usuarios"
+              severity="secondary"
+              size="small"
+              [text]="true"
+            ></p-button>
+          </div>
+        </ng-template>
+        
+        <div class="table-container">
+          <ng-container *ngIf="!loading; else tableSkeleton">
+            <p-table [value]="recentUsers" [responsive]="true">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Nome</th>
+                  <th>Tipo</th>
+                  <th>Status</th>
+                  <th>Data</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-user>
+                <tr>
+                  <td>
+                    <div class="user-info">
+                      <div class="user-avatar">
+                        <i class="pi pi-user"></i>
+                      </div>
+                      <div class="user-details">
+                        <span class="user-name">{{ user.nome }}</span>
+                        <small class="user-email">{{ user.email }}</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <p-tag
+                      [value]="getTipoUsuarioLabel(user.tipoUsuario)"
+                      [severity]="getTipoUsuarioSeverity(user.tipoUsuario)"
+                    ></p-tag>
+                  </td>
+                  <td>
+                    <p-tag
+                      [value]="getStatusLabel(user.status)"
+                      [severity]="getStatusSeverity(user.status)"
+                    ></p-tag>
+                  </td>
+                  <td>{{ formatDate(user.dataCriacao) }}</td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="4" class="text-center">
+                    Nenhum usuário encontrado
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+          <ng-template #tableSkeleton>
+            <div class="table-skeleton">
+              <p-skeleton height="2rem" class="mb-2" *ngFor="let item of [1,2,3,4,5]"></p-skeleton>
+            </div>
+          </ng-template>
+        </div>
+      </p-card>
+    </div>
+
+    <!-- Recent Academias Section -->
+    <div class="recent-academias-section">
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="card-header">
+            <h3>Academias Recentes</h3>
+            <p-button
+              icon="pi pi-external-link"
+              label="Ver Todas"
+              routerLink="/academias"
+              severity="secondary"
+              size="small"
+              [text]="true"
+            ></p-button>
+          </div>
+        </ng-template>
+        
+        <div class="table-container">
+          <ng-container *ngIf="!loading; else tableSkeleton">
+            <p-table [value]="recentAcademias" [responsive]="true">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Nome</th>
+                  <th>CNPJ</th>
+                  <th>Status</th>
+                  <th>Data</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-academia>
+                <tr>
+                  <td>
+                    <div class="academia-info">
+                      <div class="academia-avatar">
+                        <i class="pi pi-building"></i>
+                      </div>
+                      <div class="academia-details">
+                        <span class="academia-name">{{ academia.nome }}</span>
+                        <small class="academia-city">{{ academia.cidade }}</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>{{ academia.cnpj }}</td>
+                  <td>
+                    <p-tag
+                      [value]="getStatusLabel(academia.status)"
+                      [severity]="getStatusSeverity(academia.status)"
+                    ></p-tag>
+                  </td>
+                  <td>{{ formatDate(academia.dataCriacao) }}</td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="4" class="text-center">
+                    Nenhuma academia encontrada
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+        </div>
+      </p-card>
+    </div>
+  </div>
+</div>
