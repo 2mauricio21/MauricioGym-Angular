@@ -1,0 +1,122 @@
+// Bootstrap variable overrides
+$primary: $gym-primary;
+$secondary: $gym-secondary;
+$success: $gym-success;
+$info: $info-color;
+$warning: $gym-warning;
+$danger: $gym-danger;
+$light: $light-color;
+$dark: $dark-color;
+
+// Typography
+$font-family-base: $font-family-sans-serif;
+$font-size-base: $font-size-base;
+$line-height-base: $line-height-normal;
+
+// Spacing
+$spacer: 1rem;
+
+// Border radius
+$border-radius: $border-radius;
+$border-radius-sm: $border-radius-sm;
+$border-radius-lg: $border-radius-lg;
+
+// Shadows
+$box-shadow: $box-shadow;
+$box-shadow-sm: $box-shadow-sm;
+$box-shadow-lg: $box-shadow-lg;
+
+// Components
+$component-active-bg: $primary;
+$component-active-color: $white;
+
+// Navbar
+$navbar-padding-y: 0.5rem;
+$navbar-padding-x: 1rem;
+$navbar-brand-font-size: 1.25rem;
+$navbar-brand-font-weight: $font-weight-bold;
+
+// Cards
+$card-border-radius: $card-border-radius;
+$card-box-shadow: $card-shadow;
+$card-spacer-y: $card-padding;
+$card-spacer-x: $card-padding;
+$card-border-color: $gray-200;
+
+// Buttons
+$btn-border-radius: $btn-border-radius;
+$btn-padding-y: $btn-padding-y;
+$btn-padding-x: $btn-padding-x;
+$btn-font-weight: $btn-font-weight;
+$btn-box-shadow: none;
+$btn-focus-box-shadow: 0 0 0 0.2rem rgba($primary, 0.25);
+
+// Forms
+$input-border-radius: $input-border-radius;
+$input-padding-y: $input-padding-y;
+$input-padding-x: $input-padding-x;
+$input-border-color: $input-border-color;
+$input-focus-border-color: $input-focus-border-color;
+$input-focus-box-shadow: 0 0 0 0.2rem rgba($primary, 0.25);
+
+// Tables
+$table-cell-padding-y: $table-cell-padding-y;
+$table-cell-padding-x: $table-cell-padding-x;
+$table-striped-bg: $table-striped-bg;
+$table-hover-bg: $table-hover-bg;
+$table-border-color: $gray-200;
+
+// Modals
+$modal-backdrop-bg: $black;
+$modal-backdrop-opacity: 0.5;
+$modal-content-border-radius: $border-radius-lg;
+$modal-content-box-shadow-xs: $box-shadow-xl;
+$modal-content-box-shadow-sm-up: $box-shadow-2xl;
+
+// Dropdowns
+$dropdown-border-radius: $border-radius;
+$dropdown-box-shadow: $box-shadow-lg;
+$dropdown-link-hover-bg: $gray-100;
+$dropdown-link-active-bg: $primary;
+
+// Pagination
+$pagination-border-radius: $border-radius;
+$pagination-hover-bg: $gray-100;
+$pagination-active-bg: $primary;
+$pagination-active-border-color: $primary;
+
+// Progress bars
+$progress-border-radius: $border-radius-full;
+$progress-bar-bg: $primary;
+
+// Alerts
+$alert-border-radius: $border-radius;
+$alert-padding-y: 0.75rem;
+$alert-padding-x: 1rem;
+
+// Badges
+$badge-border-radius: $border-radius;
+$badge-padding-y: 0.25rem;
+$badge-padding-x: 0.5rem;
+
+// Breadcrumbs
+$breadcrumb-padding-y: 0.75rem;
+$breadcrumb-padding-x: 1rem;
+$breadcrumb-bg: $gray-100;
+$breadcrumb-border-radius: $border-radius;
+
+// List groups
+$list-group-border-radius: $border-radius;
+$list-group-item-padding-y: 0.75rem;
+$list-group-item-padding-x: 1rem;
+$list-group-hover-bg: $gray-50;
+$list-group-active-bg: $primary;
+
+// Tooltips
+$tooltip-border-radius: $border-radius;
+$tooltip-bg: $dark;
+$tooltip-opacity: 0.9;
+
+// Popovers
+$popover-border-radius: $border-radius-lg;
+$popover-box-shadow: $box-shadow
