@@ -14,14 +14,14 @@
 
   .welcome-section {
     .welcome-title {
-      font-size: 2rem;
+      font-size: 2.5rem;
       font-weight: 700;
       color: #2d3748;
       margin: 0 0 0.5rem 0;
     }
 
     .welcome-subtitle {
-      font-size: 1rem;
+      font-size: 1.25rem;
       color: #718096;
       margin: 0;
     }
@@ -30,6 +30,66 @@
   .header-actions {
     display: flex;
     gap: 0.75rem;
+
+    :host ::ng-deep .p-button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 0.875rem;
+      padding: 0.875rem 1.5rem;
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.025em;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.6s ease;
+      }
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+
+        &::before {
+          left: 100%;
+        }
+      }
+
+      &:active {
+        transform: translateY(0);
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      }
+
+      .p-button-icon {
+        font-size: 1rem;
+        margin-right: 0.5rem;
+      }
+
+      .p-button-label {
+        font-weight: 600;
+      }
+
+      &[data-pc-section="root"][aria-disabled="true"] {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
+        
+        &:hover {
+          transform: none;
+          box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+      }
+    }
   }
 }
 
@@ -40,15 +100,33 @@
   margin-bottom: 2rem;
 
   .stat-card {
-    border: none;
-    border-radius: 1rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    border-radius: 1.25rem;
+    box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
+    position: relative;
+    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 1.25rem;
+      padding: 2px;
+      background: linear-gradient(145deg, #e2e8f0, #cbd5e1);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: xor;
+      -webkit-mask-composite: xor;
+      z-index: -1;
+    }
 
     &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15), 0 10px 20px -5px rgba(0, 0, 0, 0.1);
     }
 
     :host ::ng-deep .p-card-body {
@@ -62,7 +140,9 @@
     .stat-content {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: 1rem;
 
       .stat-icon {
         width: 60px;
@@ -73,47 +153,77 @@
         justify-content: center;
         font-size: 1.5rem;
         color: white;
+        flex-shrink: 0;
       }
 
       .stat-info {
-        flex: 1;
+        text-align: center;
+        flex-shrink: 0;
 
         .stat-number {
-          font-size: 2rem;
+          font-size: 2.5rem;
           font-weight: 700;
           margin: 0 0 0.25rem 0;
           color: #2d3748;
         }
 
         .stat-label {
-          font-size: 0.875rem;
+          font-size: 1.125rem;
           font-weight: 600;
           color: #4a5568;
           margin: 0 0 0.25rem 0;
         }
 
         .stat-detail {
-          font-size: 0.75rem;
+          font-size: 1rem;
           color: #718096;
           margin: 0;
         }
       }
     }
 
-    &.usuarios-card .stat-icon {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    &.usuarios-card {
+      &::before {
+        background: linear-gradient(145deg, #667eea, #764ba2);
+      }
+      
+      .stat-icon {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+      }
     }
 
-    &.academias-card .stat-icon {
-      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    &.academias-card {
+      &::before {
+        background: linear-gradient(145deg, #f093fb, #f5576c);
+      }
+      
+      .stat-icon {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        box-shadow: 0 8px 20px rgba(240, 147, 251, 0.3);
+      }
     }
 
-    &.planos-card .stat-icon {
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    &.planos-card {
+      &::before {
+        background: linear-gradient(145deg, #4facfe, #00f2fe);
+      }
+      
+      .stat-icon {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        box-shadow: 0 8px 20px rgba(79, 172, 254, 0.3);
+      }
     }
 
-    &.pagamentos-card .stat-icon {
-      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    &.pagamentos-card {
+      &::before {
+        background: linear-gradient(145deg, #43e97b, #38f9d7);
+      }
+      
+      .stat-icon {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        box-shadow: 0 8px 20px rgba(67, 233, 123, 0.3);
+      }
     }
   }
 }
@@ -165,14 +275,14 @@
   background: #f8f9fa;
 
   h3 {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     font-weight: 600;
     color: #2d3748;
     margin: 0;
   }
 
   p {
-    font-size: 0.875rem;
+    font-size: 1.125rem;
     color: #718096;
     margin: 0.25rem 0 0 0;
   }
@@ -193,13 +303,47 @@
       padding: 0.75rem 1rem;
       font-weight: 600;
       color: #4a5568;
-      font-size: 0.875rem;
+      font-size: 1.125rem;
     }
 
     .p-datatable-tbody > tr > td {
       padding: 0.75rem 1rem;
+      font-size: 1rem;
       border: 1px solid #e9ecef;
-      font-size: 0.875rem;
+    }
+
+    // Estilos específicos para informações de usuário e academia
+    .user-info, .academia-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      .user-avatar, .academia-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #e9ecef;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6c757d;
+        font-size: 1.125rem;
+      }
+
+      .user-details, .academia-details {
+        .user-name, .academia-name {
+          font-weight: 600;
+          font-size: 1.125rem;
+          color: #2d3748;
+          display: block;
+        }
+
+        .user-email, .academia-city {
+          font-size: 1.125rem;
+          color: #718096;
+          display: block;
+        }
+      }
     }
 
     .p-datatable-tbody > tr:hover {
@@ -225,7 +369,7 @@
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
 
   .user-details,
@@ -237,13 +381,13 @@
     .academia-name {
       font-weight: 600;
       color: #2d3748;
-      font-size: 0.875rem;
+      font-size: 1rem;
     }
 
     .user-email,
     .academia-city {
       color: #718096;
-      font-size: 0.75rem;
+      font-size: 0.875rem;
     }
   }
 }

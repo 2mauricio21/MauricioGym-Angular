@@ -178,17 +178,17 @@ interface EstatisticasUsuarios {
                   <div class="flex space-x-2">
                     <button 
                       [routerLink]="['/usuarios', usuario.idUsuario]"
-                      class="text-blue-600 hover:text-blue-900">
+                      class="btn-table-action btn-table-view">
                       Ver
                     </button>
                     <button 
                       [routerLink]="['/usuarios', usuario.idUsuario, 'editar']"
-                      class="text-indigo-600 hover:text-indigo-900">
+                      class="btn-table-action btn-table-edit">
                       Editar
                     </button>
                     <button 
                       (click)="alterarStatus(usuario)"
-                      [class]="usuario.ativo ? 'text-red-600 hover:text-red-900' : 'text-green-600 hover:text-green-900'">
+                      [class]="usuario.ativo ? 'btn-table-action btn-table-delete' : 'btn-table-action btn-table-edit'">
                       {{ usuario.ativo ? 'Desativar' : 'Ativar' }}
                     </button>
                   </div>
@@ -201,10 +201,10 @@ interface EstatisticasUsuarios {
         <!-- Paginação -->
         <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
           <div class="flex-1 flex justify-between sm:hidden">
-            <button class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+            <button class="btn-pagination">
               Anterior
             </button>
-            <button class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+            <button class="btn-pagination ml-3">
               Próximo
             </button>
           </div>

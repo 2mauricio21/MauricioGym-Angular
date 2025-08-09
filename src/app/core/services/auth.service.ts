@@ -70,11 +70,13 @@ export class AuthService {
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.http
-      .post<LoginResponse>(`${this.apiUrl}${environment.auth.loginEndpoint}`, credentials)
+      .post<any>(`${this.apiUrl}${environment.auth.loginEndpoint}`, credentials)
       .pipe(
         tap(response => {
-          if (response.token && response.user) {
-            this.setAuthData(response.token, response.user);
+          if (response.token && (response.user || response.usuario)) {
+            // A API retorna 'usuario' mas o frontend espera 'user'
+            const user = response.user || response.usuario;
+            this.setAuthData(response.token, user);
             if (response.refreshToken) {
               localStorage.setItem(environment.auth.refreshTokenKey, response.refreshToken);
             }
