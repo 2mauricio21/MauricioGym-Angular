@@ -11,6 +11,12 @@
 /* Import Custom Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
+/* Import Custom Button Styles */
+@import './app/shared/styles/button-styles.scss';
+
+/* Import Custom Text Sizes */
+@import './app/shared/styles/text-sizes.scss';
+
 /* CSS Reset and Base Styles */
 * {
   box-sizing: border-box;
@@ -25,11 +31,9 @@ html {
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #374151;
-  background-color: #f8fafc;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -102,7 +106,6 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   line-height: 1.25;
-  color: var(--gray-900);
   margin-bottom: var(--spacing-md);
 }
 
@@ -176,8 +179,7 @@ a {
 
 /* Focus Styles */
 *:focus {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
+  outline: none;
 }
 
 /* Selection Styles */
@@ -223,14 +225,15 @@ a {
   
   &:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    box-shadow: none;
+    outline: none;
   }
 }
 
 .p-card {
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-md);
-  border: 1px solid var(--gray-200);
+  border: none;
   
   .p-card-header {
     border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
@@ -338,7 +341,7 @@ a {
 /* Responsive Design */
 @media (max-width: 768px) {
   html {
-    font-size: 14px;
+    font-size: 15px;
   }
   
   h1 { font-size: 1.875rem; }
@@ -346,12 +349,12 @@ a {
   h3 { font-size: 1.25rem; }
   h4 { font-size: 1.125rem; }
   h5 { font-size: 1rem; }
-  h6 { font-size: 0.875rem; }
+  h6 { font-size: 1rem; }
 }
 
 @media (max-width: 480px) {
   html {
-    font-size: 13px;
+    font-size: 14px;
   }
 }
 
@@ -433,8 +436,5 @@ a {
     --gray-900: #f9fafb;
   }
   
-  body {
-    background-color: var(--gray-50);
-    color: var(--gray-900);
-  }
+
 }
