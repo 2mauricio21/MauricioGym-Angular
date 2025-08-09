@@ -1,6 +1,6 @@
 export interface LoginRequest {
   email: string;
-  password: string;
+  senha: string;
 }
 
 export interface LoginResponse {
@@ -50,7 +50,7 @@ export interface RegisterRequest {
   nome: string;
   nomeCompleto: string;
   email: string;
-  password: string;
+  senha: string;
   confirmPassword: string;
   cpf: string;
   telefone: string;

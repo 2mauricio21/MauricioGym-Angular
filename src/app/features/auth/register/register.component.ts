@@ -127,7 +127,7 @@ export class RegisterComponent implements OnInit {
         telefone: formValue.telefone.replace(/\D/g, ''),
         dataNascimento: formValue.dataNascimento,
         tipoUsuario: formValue.tipoUsuario,
-        password: formValue.password,
+        senha: formValue.password,
         confirmPassword: formValue.confirmPassword
       };
 

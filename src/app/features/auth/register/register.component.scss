@@ -1,344 +1,156 @@
-.register-container {
+// Estilos minimalistas para o componente de register
+// Usando Bootstrap como base
+
+.login-container {
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 1rem;
 }
 
-.register-wrapper {
-  width: 100%;
-  max-width: 600px;
+.logo i {
+  color: #ffd700;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
-.register-header {
-  text-align: center;
-  margin-bottom: 2rem;
-  color: white;
-
-  .logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    margin-bottom: 0.5rem;
-
-    i {
-      font-size: 2.5rem;
-      color: #ffd700;
-    }
-
-    h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      margin: 0;
-      color: white;
-    }
-  }
-
-  .subtitle {
-    font-size: 1rem;
-    opacity: 0.9;
-    margin: 0;
-  }
+// Card customizations
+.card {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.register-card {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  border-radius: 1rem;
-  border: none;
-  background: white;
-
-  :host ::ng-deep .p-card-body {
-    padding: 2rem;
-  }
-
-  :host ::ng-deep .p-card-content {
-    padding: 0;
-  }
-}
-
-.register-form {
-  .form-row {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-
-    &:last-of-type {
-      margin-bottom: 0;
-    }
-
-    .form-group {
-      flex: 1;
-
-      &.col-md-6 {
-        flex: 0 0 calc(50% - 0.5rem);
-      }
-
-      .form-label {
-        display: block;
-        margin-bottom: 0.5rem;
-        font-weight: 600;
-        color: #374151;
-        font-size: 0.875rem;
-      }
-
-      .form-control {
-        width: 100%;
-        padding: 0.75rem 1rem;
-        border: 1px solid #d1d5db;
-        border-radius: 0.5rem;
-        font-size: 1rem;
-        transition: all 0.2s ease;
-
-        &:focus {
-          outline: none;
-          border-color: #667eea;
-          box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        &.is-invalid {
-          border-color: #ef4444;
-          box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
-        }
-      }
-
-      .invalid-feedback {
-        display: block;
-        color: #ef4444;
-        font-size: 0.875rem;
-        margin-top: 0.25rem;
-      }
-    }
-  }
-
-  .form-actions {
-    margin-top: 2rem;
-    margin-bottom: 1.5rem;
-
-    .register-button {
-      :host ::ng-deep .p-button {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border: none;
-        padding: 0.75rem 1.5rem;
-        font-weight: 600;
-        border-radius: 0.5rem;
-        transition: all 0.2s ease;
-
-        &:hover:not(:disabled) {
-          transform: translateY(-1px);
-          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-
-        &:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
-        }
-      }
-    }
-  }
-}
-
-.register-footer {
-  text-align: center;
-  padding-top: 1rem;
-  border-top: 1px solid #e5e7eb;
-
-  .login-text {
-    margin: 0;
-    color: #6b7280;
-    font-size: 0.875rem;
-
-    .login-link {
-      background: none;
-      border: none;
-      color: #667eea;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      margin-left: 0.25rem;
-      transition: color 0.2s ease;
-
-      &:hover {
-        color: #5a67d8;
-        text-decoration: underline;
-      }
-    }
-  }
-}
-
-// PrimeNG component styling
+// PrimeNG component adjustments
 :host ::ng-deep {
-  // Password component
+  .p-button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    padding: 0.875rem 1.5rem !important;
+    min-height: 50px;
+    
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+    
+    &:disabled {
+      opacity: 0.6;
+    }
+  }
+  
   .p-password {
-    width: 100%;
-
     .p-inputtext {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      border: 1px solid #d1d5db;
-      border-radius: 0.5rem;
-      font-size: 1rem;
+      border: 1px solid #dee2e6;
       transition: all 0.2s ease;
-
+      padding: 0.875rem 1rem;
+      min-height: 50px;
+      
       &:focus {
-        outline: none;
         border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
       }
-
+      
       &.is-invalid {
-        border-color: #ef4444;
-        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
       }
     }
-
+    
     .p-password-toggle {
-      color: #6b7280;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      top: 0;
+      right: 0.75rem;
       
-      &:hover {
-        color: #374151;
+      .p-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
   }
-
-  // InputMask component
-  .p-inputmask {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 1px solid #d1d5db;
-    border-radius: 0.5rem;
-    font-size: 1rem;
+  
+  .p-inputtext,
+  .p-inputmask,
+  .p-dropdown .p-dropdown-label {
+    border: 1px solid #dee2e6;
     transition: all 0.2s ease;
-
+    padding: 0.875rem 1rem;
+    min-height: 50px;
+    
     &:focus {
-      outline: none;
       border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
     }
-
+    
     &.is-invalid {
-      border-color: #ef4444;
-      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+      border-color: #dc3545;
+      box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
     }
   }
-
-  // Calendar component
-  .p-calendar {
-    .p-inputtext {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      border: 1px solid #d1d5db;
-      border-radius: 0.5rem;
-      font-size: 1rem;
-      transition: all 0.2s ease;
-
-      &:focus {
-        outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-      }
-
-      &.is-invalid {
-        border-color: #ef4444;
-        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
-      }
-    }
-
-    .p-datepicker-trigger {
-      color: #6b7280;
-      
-      &:hover {
-        color: #374151;
-      }
-    }
+  
+  .p-calendar .p-inputtext {
+    padding: 0.875rem 1rem;
+    min-height: 50px;
   }
-
-  // Dropdown component
+  
   .p-dropdown {
-    .p-dropdown-label {
-      padding: 0.75rem 1rem;
-      border: 1px solid #d1d5db;
-      border-radius: 0.5rem;
-      font-size: 1rem;
-      transition: all 0.2s ease;
-    }
-
-    &:not(.p-disabled):hover .p-dropdown-label {
-      border-color: #9ca3af;
-    }
-
-    &.p-focus .p-dropdown-label {
-      outline: none;
+    &.p-dropdown-focused .p-dropdown-label {
       border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
     }
-
+    
     &.is-invalid .p-dropdown-label {
-      border-color: #ef4444;
-      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+      border-color: #dc3545;
+      box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
     }
-
-    .p-dropdown-trigger {
-      color: #6b7280;
-      
-      &:hover {
-        color: #374151;
-      }
+    
+    .p-dropdown-label {
+      min-height: 50px;
+      display: flex;
+      align-items: center;
     }
   }
 }
 
-// Responsive design
-@media (max-width: 768px) {
-  .register-container {
+// Responsive adjustments
+@media (max-width: 576px) {
+  .login-container {
     padding: 0.5rem;
   }
-
-  .register-wrapper {
-    max-width: 100%;
+  
+  .card-body {
+    padding: 2rem !important;
   }
-
-  .register-header {
-    margin-bottom: 1.5rem;
-
-    .logo {
-      h1 {
-        font-size: 1.75rem;
-      }
-
-      i {
-        font-size: 2rem;
-      }
-    }
+  
+  .logo i {
+    font-size: 2rem !important;
   }
-
-  .register-card {
-    :host ::ng-deep .p-card-body {
-      padding: 1.5rem;
-    }
+  
+  .h2 {
+    font-size: 1.5rem !important;
   }
-
-  .register-form {
-    .form-row {
-      flex-direction: column;
-      gap: 0;
-
-      .form-group {
-        &.col-md-6 {
-          flex: 1;
-          margin-bottom: 1.5rem;
-        }
+  
+  .row {
+    .col-md-6 {
+      margin-bottom: 1rem;
+      
+      &:last-child {
+        margin-bottom: 0;
       }
     }
   }
-}
-
-@media (max-width: 480px) {
-  .register-card {
-    :host ::ng-deep .p-card-body {
-      padding: 1rem;
+  
+  :host ::ng-deep {
+    .p-password .p-inputtext,
+    .p-inputtext,
+    .p-inputmask,
+    .p-dropdown .p-dropdown-label {
+      min-height: 48px;
+      padding: 0.75rem 1rem;
     }
   }
 }
