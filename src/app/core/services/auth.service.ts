@@ -13,7 +13,15 @@ import {
   ChangePasswordRequest,
   ResetPasswordRequest,
   ResetPasswordConfirmRequest,
-  RegisterRequest
+  RegisterRequest,
+  LoginRequestEntity,
+  LoginResponseEntity,
+  ValidateTokenRequestEntity,
+  ValidateTokenResponseEntity,
+  RefreshTokenRequestEntity,
+  RefreshTokenResponseEntity,
+  AlterarSenhaRequestEntity,
+  UsuarioResponseEntity
 } from '../models';
 
 @Injectable({
@@ -26,7 +34,7 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
   public token$ = this.tokenSubject.asObservable();
   
-  private readonly apiUrl = environment.apiUrls.auth;
+  private readonly apiUrl = environment.apiUrls.seguranca;
 
   constructor(
     private http: HttpClient,
@@ -69,17 +77,45 @@ export class AuthService {
   }
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
+    const loginRequest: LoginRequestEntity = {
+      email: credentials.email,
+      senha: credentials.senha
+    };
+
     return this.http
-      .post<any>(`${this.apiUrl}${environment.auth.loginEndpoint}`, credentials)
+      .post<any>(`${this.apiUrl}/login`, loginRequest)
       .pipe(
-        tap(response => {
-          if (response.token && (response.user || response.usuario)) {
-            // A API retorna 'usuario' mas o frontend espera 'user'
-            const user = response.user || response.usuario;
-            this.setAuthData(response.token, user);
-            if (response.refreshToken) {
-              localStorage.setItem(environment.auth.refreshTokenKey, response.refreshToken);
+        map(response => {
+          // Verificar se a resposta contém dados válidos
+          if (response && response.retorno) {
+            const loginResponse: LoginResponseEntity = response.retorno;
+            
+            // Converter para formato esperado pelo frontend
+            const userInfo: UserInfo = {
+              id: loginResponse.usuario.idUsuario,
+              nome: loginResponse.usuario.nome,
+              nomeCompleto: loginResponse.usuario.nomeCompleto || `${loginResponse.usuario.nome} ${loginResponse.usuario.sobrenome}`,
+              email: loginResponse.usuario.email,
+              tipoUsuario: loginResponse.usuario.tipoUsuario || 'Cliente',
+              statusUsuario: loginResponse.usuario.ativo ? 'Ativo' : 'Inativo'
+            };
+
+            const compatibleResponse: LoginResponse = {
+              token: loginResponse.token,
+              refreshToken: loginResponse.refreshToken,
+              user: userInfo,
+              expiresIn: new Date(loginResponse.dataExpiracao).getTime() - Date.now()
+            };
+
+            // Salvar dados de autenticação
+            this.setAuthData(loginResponse.token, userInfo);
+            if (loginResponse.refreshToken) {
+              localStorage.setItem(environment.auth.refreshTokenKey, loginResponse.refreshToken);
             }
+
+            return compatibleResponse;
+          } else {
+            throw new Error('Resposta inválida do servidor');
           }
         }),
         catchError(error => {
@@ -107,20 +143,32 @@ export class AuthService {
       return throwError(() => new Error('Refresh token não encontrado'));
     }
 
-    const request: RefreshTokenRequest = { refreshToken };
+    const request: RefreshTokenRequestEntity = { refreshToken };
     
     return this.http
-      .post<RefreshTokenResponse>(`${this.apiUrl}${environment.auth.refreshEndpoint}`, request)
+      .post<any>(`${this.apiUrl}/refresh-token`, request)
       .pipe(
-        tap(response => {
-          if (response.token) {
+        map(response => {
+          if (response && response.retorno) {
+            const refreshResponse: RefreshTokenResponseEntity = response.retorno;
+            
             const currentUser = this.getCurrentUser();
             if (currentUser) {
-              this.setAuthData(response.token, currentUser);
+              this.setAuthData(refreshResponse.token, currentUser);
             }
-            if (response.refreshToken) {
-              localStorage.setItem(environment.auth.refreshTokenKey, response.refreshToken);
+            if (refreshResponse.refreshToken) {
+              localStorage.setItem(environment.auth.refreshTokenKey, refreshResponse.refreshToken);
             }
+
+            const compatibleResponse: RefreshTokenResponse = {
+              token: refreshResponse.token,
+              refreshToken: refreshResponse.refreshToken,
+              expiresIn: new Date(refreshResponse.dataExpiracao).getTime() - Date.now()
+            };
+
+            return compatibleResponse;
+          } else {
+            throw new Error('Resposta inválida do servidor');
           }
         }),
         catchError(error => {
@@ -132,8 +180,19 @@ export class AuthService {
   }
 
   changePassword(request: ChangePasswordRequest): Observable<any> {
+    const currentUser = this.getCurrentUser();
+    if (!currentUser) {
+      return throwError(() => new Error('Usuário não autenticado'));
+    }
+
+    const alterarSenhaRequest: AlterarSenhaRequestEntity = {
+      idUsuario: currentUser.id,
+      senhaAtual: request.currentPassword,
+      novaSenha: request.newPassword
+    };
+
     return this.http
-      .post(`${this.apiUrl}/change-password`, request)
+      .post(`${this.apiUrl}/alterar-senha`, alterarSenhaRequest)
       .pipe(
         catchError(error => {
           console.error('Erro ao alterar senha:', error);
@@ -182,17 +241,36 @@ export class AuthService {
       return of(false);
     }
 
+    const request: ValidateTokenRequestEntity = { token };
+
     return this.http
-      .get<any>(`${this.apiUrl}/validate`)
+      .post<any>(`${this.apiUrl}/validar-token`, request)
       .pipe(
         map(response => {
-          if (response.success && response.data) {
-            this.currentUserSubject.next(response.data);
-            return true;
+          if (response && response.retorno) {
+            const validateResponse: ValidateTokenResponseEntity = response.retorno;
+            
+            if (validateResponse.valido && validateResponse.usuario) {
+              // Converter para formato esperado pelo frontend
+              const userInfo: UserInfo = {
+                id: validateResponse.usuario.idUsuario,
+                nome: validateResponse.usuario.nome,
+                nomeCompleto: validateResponse.usuario.nomeCompleto || `${validateResponse.usuario.nome} ${validateResponse.usuario.sobrenome}`,
+                email: validateResponse.usuario.email,
+                tipoUsuario: validateResponse.usuario.tipoUsuario || 'Cliente',
+                statusUsuario: validateResponse.usuario.ativo ? 'Ativo' : 'Inativo'
+              };
+              
+              // Atualizar dados do usuário com informações atualizadas do backend
+              this.currentUserSubject.next(userInfo);
+              localStorage.setItem('mauriciogym_user', JSON.stringify(userInfo));
+              return true;
+            }
           }
           return false;
         }),
-        catchError(() => {
+        catchError((error) => {
+          console.log('Token inválido ou expirado:', error);
           this.logout();
           return of(false);
         })
@@ -259,15 +337,69 @@ export class AuthService {
   }
 
   initializeAuth(): void {
-    this.validateToken().subscribe({
-      next: (isValid) => {
-        if (!isValid) {
-          this.logout();
-        }
-      },
-      error: () => {
+    // Carregar dados salvos do localStorage
+    const savedToken = localStorage.getItem(environment.auth.tokenKey);
+    const savedUser = localStorage.getItem('mauriciogym_user');
+    
+    if (savedToken && savedUser) {
+      try {
+        const user = JSON.parse(savedUser);
+        this.tokenSubject.next(savedToken);
+        this.currentUserSubject.next(user);
+        
+        // Validar token no backend
+        this.validateToken().subscribe({
+          next: (isValid) => {
+            if (!isValid) {
+              console.log('Token inválido, fazendo logout...');
+              this.logout();
+            } else {
+              console.log('Login automático realizado com sucesso');
+            }
+          },
+          error: () => {
+            console.log('Erro na validação do token, fazendo logout...');
+            this.logout();
+          }
+        });
+      } catch (error) {
+        console.error('Erro ao carregar dados salvos:', error);
         this.logout();
       }
-    });
+    }
+  }
+
+  // Método para verificar se o token está próximo do vencimento
+  isTokenExpiringSoon(): boolean {
+    const token = this.token;
+    if (!token) return false;
+    
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const expirationTime = payload.exp * 1000; // Converter para milliseconds
+      const currentTime = Date.now();
+      const timeUntilExpiration = expirationTime - currentTime;
+      
+      // Retorna true se o token expira em menos de 5 minutos (300000 ms)
+      return timeUntilExpiration < 300000;
+    } catch (error) {
+      console.error('Erro ao verificar expiração do token:', error);
+      return true;
+    }
+  }
+
+  // Método para renovar token automaticamente se necessário
+  autoRefreshToken(): void {
+    if (this.isTokenExpiringSoon()) {
+      this.refreshToken().subscribe({
+        next: () => {
+          console.log('Token renovado automaticamente');
+        },
+        error: (error) => {
+          console.error('Erro ao renovar token automaticamente:', error);
+          this.logout();
+        }
+      });
+    }
   }
 }

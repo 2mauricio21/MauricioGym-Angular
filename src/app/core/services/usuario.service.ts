@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import {
   ApiResponse,
@@ -9,7 +9,12 @@ import {
   FilterOptions,
   PaginatedResponse,
   UpdateUsuarioRequest,
-  Usuario
+  Usuario,
+  IncluirUsuarioRequestEntity,
+  AlterarUsuarioRequestEntity,
+  ConsultarUsuarioRequestEntity,
+  ExcluirUsuarioRequestEntity,
+  UsuarioResponseEntity
 } from '../models';
 import { BaseService } from './base.service';
 
@@ -40,8 +45,46 @@ export class UsuarioService extends BaseService {
   }
 
   consultarUsuario(id: number): Observable<ApiResponse<Usuario>> {
-    return this.http.get<ApiResponse<Usuario>>(`${this.apiUrl}/${id}`)
-      .pipe(catchError(this.handleError));
+    const request: ConsultarUsuarioRequestEntity = { idUsuario: id };
+    
+    return this.http.post<any>(`${this.apiUrl}/consultar`, request)
+      .pipe(
+        map(response => {
+          if (response && response.retorno) {
+            const usuarioResponse: UsuarioResponseEntity = response.retorno;
+            
+            // Converter para formato esperado pelo frontend
+            const usuario: Usuario = {
+              idUsuario: usuarioResponse.idUsuario,
+              nome: usuarioResponse.nome,
+              sobrenome: usuarioResponse.sobrenome,
+              email: usuarioResponse.email,
+              cpf: usuarioResponse.cpf,
+              telefone: usuarioResponse.telefone,
+              dataNascimento: usuarioResponse.dataNascimento,
+              endereco: usuarioResponse.endereco,
+              cidade: usuarioResponse.cidade,
+              estado: usuarioResponse.estado,
+              cep: usuarioResponse.cep,
+              ativo: usuarioResponse.ativo,
+              dataCadastro: usuarioResponse.dataCadastro,
+              dataUltimoLogin: usuarioResponse.dataUltimoLogin,
+              nomeCompleto: usuarioResponse.nomeCompleto || `${usuarioResponse.nome} ${usuarioResponse.sobrenome}`
+            };
+            
+            const apiResponse: ApiResponse<Usuario> = {
+              success: true,
+              data: usuario,
+              message: 'Usuário consultado com sucesso'
+            };
+            
+            return apiResponse;
+          } else {
+            throw new Error('Resposta inválida do servidor');
+          }
+        }),
+        catchError(this.handleError)
+      );
   }
 
   consultarUsuarioPorCpf(cpf: string): Observable<ApiResponse<Usuario>> {
@@ -55,18 +98,138 @@ export class UsuarioService extends BaseService {
   }
 
   incluirUsuario(usuario: CreateUsuarioRequest): Observable<ApiResponse<Usuario>> {
-    return this.http.post<ApiResponse<Usuario>>(`${this.apiUrl}`, usuario)
-      .pipe(catchError(this.handleError));
+    const request: IncluirUsuarioRequestEntity = {
+      nome: usuario.nome,
+      sobrenome: usuario.sobrenome,
+      email: usuario.email,
+      senha: usuario.senha,
+      cpf: usuario.cpf,
+      telefone: usuario.telefone,
+      dataNascimento: usuario.dataNascimento,
+      endereco: usuario.endereco,
+      cidade: usuario.cidade,
+      estado: usuario.estado,
+      cep: usuario.cep,
+      ativo: usuario.ativo ?? true
+    };
+    
+    return this.http.post<any>(`${this.apiUrl}/incluir`, request)
+      .pipe(
+        map(response => {
+          if (response && response.retorno) {
+            const usuarioResponse: UsuarioResponseEntity = response.retorno;
+            
+            // Converter para formato esperado pelo frontend
+            const usuarioResult: Usuario = {
+              idUsuario: usuarioResponse.idUsuario,
+              nome: usuarioResponse.nome,
+              sobrenome: usuarioResponse.sobrenome,
+              email: usuarioResponse.email,
+              cpf: usuarioResponse.cpf,
+              telefone: usuarioResponse.telefone,
+              dataNascimento: usuarioResponse.dataNascimento,
+              endereco: usuarioResponse.endereco,
+              cidade: usuarioResponse.cidade,
+              estado: usuarioResponse.estado,
+              cep: usuarioResponse.cep,
+              ativo: usuarioResponse.ativo,
+              dataCadastro: usuarioResponse.dataCadastro,
+              dataUltimoLogin: usuarioResponse.dataUltimoLogin,
+              nomeCompleto: usuarioResponse.nomeCompleto || `${usuarioResponse.nome} ${usuarioResponse.sobrenome}`
+            };
+            
+            const apiResponse: ApiResponse<Usuario> = {
+              success: true,
+              data: usuarioResult,
+              message: 'Usuário incluído com sucesso'
+            };
+            
+            return apiResponse;
+          } else {
+            throw new Error('Resposta inválida do servidor');
+          }
+        }),
+        catchError(this.handleError)
+      );
   }
 
   alterarUsuario(usuario: UpdateUsuarioRequest): Observable<ApiResponse<Usuario>> {
-    return this.http.put<ApiResponse<Usuario>>(`${this.apiUrl}/${usuario.idUsuario}`, usuario)
-      .pipe(catchError(this.handleError));
+    const request: AlterarUsuarioRequestEntity = {
+      idUsuario: usuario.idUsuario,
+      nome: usuario.nome,
+      sobrenome: usuario.sobrenome,
+      email: usuario.email,
+      senha: usuario.senha,
+      cpf: usuario.cpf,
+      telefone: usuario.telefone,
+      dataNascimento: usuario.dataNascimento,
+      endereco: usuario.endereco,
+      cidade: usuario.cidade,
+      estado: usuario.estado,
+      cep: usuario.cep,
+      ativo: usuario.ativo
+    };
+    
+    return this.http.post<any>(`${this.apiUrl}/alterar`, request)
+      .pipe(
+        map(response => {
+          if (response && response.retorno) {
+            const usuarioResponse: UsuarioResponseEntity = response.retorno;
+            
+            // Converter para formato esperado pelo frontend
+            const usuarioResult: Usuario = {
+              idUsuario: usuarioResponse.idUsuario,
+              nome: usuarioResponse.nome,
+              sobrenome: usuarioResponse.sobrenome,
+              email: usuarioResponse.email,
+              cpf: usuarioResponse.cpf,
+              telefone: usuarioResponse.telefone,
+              dataNascimento: usuarioResponse.dataNascimento,
+              endereco: usuarioResponse.endereco,
+              cidade: usuarioResponse.cidade,
+              estado: usuarioResponse.estado,
+              cep: usuarioResponse.cep,
+              ativo: usuarioResponse.ativo,
+              dataCadastro: usuarioResponse.dataCadastro,
+              dataUltimoLogin: usuarioResponse.dataUltimoLogin,
+              nomeCompleto: usuarioResponse.nomeCompleto || `${usuarioResponse.nome} ${usuarioResponse.sobrenome}`
+            };
+            
+            const apiResponse: ApiResponse<Usuario> = {
+              success: true,
+              data: usuarioResult,
+              message: 'Usuário alterado com sucesso'
+            };
+            
+            return apiResponse;
+          } else {
+            throw new Error('Resposta inválida do servidor');
+          }
+        }),
+        catchError(this.handleError)
+      );
   }
 
   excluirUsuario(id: number): Observable<ApiResponse<any>> {
-    return this.http.delete<ApiResponse<any>>(`${this.apiUrl}/${id}`)
-      .pipe(catchError(this.handleError));
+    const request: ExcluirUsuarioRequestEntity = { idUsuario: id };
+    
+    return this.http.post<any>(`${this.apiUrl}/excluir`, request)
+      .pipe(
+        map(response => {
+          if (response) {
+            const apiResponse: ApiResponse<any> = {
+              success: true,
+              data: null,
+              message: 'Usuário excluído com sucesso'
+            };
+            
+            return apiResponse;
+          } else {
+            throw new Error('Resposta inválida do servidor');
+          }
+        }),
+        catchError(this.handleError)
+      );
   }
 
   listarUsuariosAtivos(): Observable<ApiResponse<Usuario[]>> {

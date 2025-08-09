@@ -16,6 +16,11 @@ import { environment } from '../../../environments/environment';
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   
+  // Verificar se o token está próximo do vencimento e renovar automaticamente
+  if (authService.token && authService.isTokenExpiringSoon()) {
+    authService.autoRefreshToken();
+  }
+  
   const token = authService.token;
   if (token) {
     const authReq = req.clone({
@@ -35,6 +40,11 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    // Verificar se o token está próximo do vencimento e renovar automaticamente
+    if (this.authService.token && this.authService.isTokenExpiringSoon()) {
+      this.authService.autoRefreshToken();
+    }
+    
     // Adicionar token se disponível
     const token = this.authService.token;
     if (token) {
