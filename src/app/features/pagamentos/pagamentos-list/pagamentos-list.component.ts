@@ -11,7 +11,7 @@ import { RouterModule } from '@angular/router';
       <div class="flex items-center justify-between mb-6">
         <h1 class="text-3xl font-bold">Gerenciar Pagamentos</h1>
         <button routerLink="/pagamentos/novo" 
-                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
+                class="btn-primary">
           Registrar Pagamento
         </button>
       </div>
@@ -46,7 +46,7 @@ import { RouterModule } from '@angular/router';
                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
           </div>
           <div class="flex items-end">
-            <button class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
+            <button class="btn-secondary">
               Filtrar
             </button>
           </div>
@@ -114,10 +114,10 @@ import { RouterModule } from '@angular/router';
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <button routerLink="/pagamentos/1" 
-                          class="text-blue-600 hover:text-blue-900 mr-3">Ver</button>
+                          class="btn-table-action btn-table-view mr-3">Ver</button>
                   <button routerLink="/pagamentos/1/editar" 
-                          class="text-green-600 hover:text-green-900 mr-3">Editar</button>
-                  <button class="text-red-600 hover:text-red-900">Cancelar</button>
+                          class="btn-table-action btn-table-edit mr-3">Editar</button>
+                  <button class="btn-table-action btn-table-delete">Cancelar</button>
                 </td>
               </tr>
               
@@ -145,9 +145,9 @@ import { RouterModule } from '@angular/router';
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <button routerLink="/pagamentos/2" 
-                          class="text-blue-600 hover:text-blue-900 mr-3">Ver</button>
-                  <button class="text-yellow-600 hover:text-yellow-900 mr-3">Cobrar</button>
-                  <button class="text-red-600 hover:text-red-900">Cancelar</button>
+                          class="btn-table-action btn-table-view mr-3">Ver</button>
+                  <button class="btn-table-action btn-table-warning mr-3">Cobrar</button>
+                  <button class="btn-table-action btn-table-delete">Cancelar</button>
                 </td>
               </tr>
               
@@ -168,11 +168,11 @@ import { RouterModule } from '@angular/router';
           Mostrando 1 a 10 de 156 resultados
         </div>
         <div class="flex space-x-2">
-          <button class="px-3 py-1 border border-gray-300 rounded-md text-sm hover:bg-gray-50">Anterior</button>
-          <button class="px-3 py-1 bg-blue-500 text-white rounded-md text-sm">1</button>
-          <button class="px-3 py-1 border border-gray-300 rounded-md text-sm hover:bg-gray-50">2</button>
-          <button class="px-3 py-1 border border-gray-300 rounded-md text-sm hover:bg-gray-50">3</button>
-          <button class="px-3 py-1 border border-gray-300 rounded-md text-sm hover:bg-gray-50">Próximo</button>
+          <button class="btn-pagination">Anterior</button>
+          <button class="btn-pagination-active">1</button>
+          <button class="btn-pagination">2</button>
+          <button class="btn-pagination">3</button>
+          <button class="btn-pagination">Próximo</button>
         </div>
       </div>
     </div>

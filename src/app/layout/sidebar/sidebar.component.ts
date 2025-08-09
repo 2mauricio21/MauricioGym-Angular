@@ -4,6 +4,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { ButtonModule } from 'primeng/button';
 import { UserInfo, TipoUsuario } from '../../core/models';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 interface MenuItem {
   label: string;
@@ -24,7 +25,19 @@ interface MenuItem {
     ButtonModule
   ],
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.scss'
+  styleUrl: './sidebar.component.scss',
+  animations: [
+    trigger('slideDown', [
+      transition(':enter', [
+        style({ height: '0', opacity: '0', overflow: 'hidden' }),
+        animate('300ms ease-in-out', style({ height: '*', opacity: '1' }))
+      ]),
+      transition(':leave', [
+        style({ height: '*', opacity: '1', overflow: 'hidden' }),
+        animate('300ms ease-in-out', style({ height: '0', opacity: '0' }))
+      ])
+    ])
+  ]
 })
 export class SidebarComponent implements OnInit {
   @Input() visible = true;

@@ -2,9 +2,10 @@
   display: grid;
   grid-template-areas:
     'navbar navbar'
-    'sidebar main';
+    'sidebar main'
+    'footer footer';
   grid-template-columns: 280px 1fr;
-  grid-template-rows: 60px 1fr;
+  grid-template-rows: 60px 1fr auto;
   min-height: 100vh;
   background-color: #f8f9fa;
   transition: grid-template-columns 0.3s ease;
@@ -72,10 +73,11 @@
     flex: 1;
     background-color: #f8f9fa;
   }
+}
 
-  .layout-footer {
-    margin-top: auto;
-  }
+.layout-footer {
+  grid-area: footer;
+  width: 100%;
 }
 
 .mobile-overlay {

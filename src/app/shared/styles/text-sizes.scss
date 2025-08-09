@@ -1,0 +1,136 @@
+// Estilos globais para tamanhos de texto aumentados
+
+// Tamanhos base aumentados
+body {
+  font-size: 1rem; // Aumentado de 0.875rem
+  line-height: 1.6;
+}
+
+// Headings com tamanhos aumentados
+h1 { font-size: 2.75rem; } // Aumentado de 2.25rem
+h2 { font-size: 2.25rem; } // Aumentado de 1.875rem
+h3 { font-size: 1.875rem; } // Aumentado de 1.5rem
+h4 { font-size: 1.5rem; }   // Aumentado de 1.25rem
+h5 { font-size: 1.25rem; }  // Aumentado de 1.125rem
+h6 { font-size: 1.125rem; } // Aumentado de 1rem
+
+// Parágrafos com tamanho aumentado
+p {
+  font-size: 1.125rem; // Aumentado de 1rem
+  line-height: 1.7;
+}
+
+// Labels e textos de formulário
+label {
+  font-size: 1.125rem; // Aumentado
+  font-weight: 500;
+}
+
+// Inputs e selects
+input, select, textarea {
+  font-size: 1.125rem; // Aumentado
+}
+
+// Botões
+button {
+  font-size: 1.125rem; // Aumentado
+}
+
+// Textos pequenos
+small {
+  font-size: 1rem; // Aumentado de 0.875rem
+}
+
+// Classes utilitárias para tamanhos de texto
+.text-xs { font-size: 0.875rem; }
+.text-sm { font-size: 1rem; }
+.text-base { font-size: 1.125rem; }
+.text-lg { font-size: 1.25rem; }
+.text-xl { font-size: 1.375rem; }
+.text-2xl { font-size: 1.5rem; }
+.text-3xl { font-size: 1.875rem; }
+.text-4xl { font-size: 2.25rem; }
+.text-5xl { font-size: 3rem; }
+
+// Estilos específicos para tabelas
+table {
+  th {
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+  
+  td {
+    font-size: 1.125rem;
+  }
+}
+
+// Estilos para cards
+.card {
+  .card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  
+  .card-text {
+    font-size: 1.125rem;
+  }
+}
+
+// Estilos para listas
+ul, ol {
+  li {
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+}
+
+// Estilos para navegação
+nav {
+  a {
+    font-size: 1.125rem;
+  }
+}
+
+// Estilos para badges e tags
+.badge, .tag {
+  font-size: 1rem;
+}
+
+// Estilos para tooltips
+.tooltip {
+  font-size: 1rem;
+}
+
+// Estilos para modais
+.modal {
+  .modal-title {
+    font-size: 1.75rem;
+  }
+  
+  .modal-body {
+    font-size: 1.125rem;
+  }
+}
+
+// Estilos para alertas
+.alert {
+  font-size: 1.125rem;
+}
+
+// Responsividade para textos
+@media (max-width: 768px) {
+  body {
+    font-size: 1rem;
+  }
+  
+  h1 { font-size: 2.25rem; }
+  h2 { font-size: 1.875rem; }
+  h3 { font-size: 1.5rem; }
+  h4 { font-size: 1.25rem; }
+  h5 { font-size: 1.125rem; }
+  h6 { font-size: 1rem; }
+  
+  p {
+    font-size: 1rem;
+  }
+}
