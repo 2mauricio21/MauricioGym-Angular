@@ -28,7 +28,7 @@ import { LoginRequest } from '../../../core/models';
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
-  loading = false;
+  isLoading = false;
   returnUrl = '/';
 
   constructor(
@@ -47,32 +47,36 @@ export class LoginComponent implements OnInit {
   private createForm(): void {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]],
+      senha: ['', [Validators.required]],
       rememberMe: [false]
     });
   }
 
   onSubmit(): void {
     if (this.loginForm.valid) {
-      this.loading = true;
+      this.isLoading = true;
       
       const loginRequest: LoginRequest = {
         email: this.loginForm.value.email,
-        password: this.loginForm.value.password
+        senha: this.loginForm.value.senha
       };
 
       this.authService.login(loginRequest).subscribe({
         next: (response: any) => {
+          this.isLoading = false;
           this.messageService.add({
             severity: 'success',
             summary: 'Sucesso',
             detail: 'Login realizado com sucesso!'
           });
           
-          this.router.navigate([this.returnUrl]);
+          // Aguarda um pouco para mostrar a mensagem antes de redirecionar
+          setTimeout(() => {
+            this.router.navigate([this.returnUrl]);
+          }, 1000);
         },
         error: (error: any) => {
-          this.loading = false;
+          this.isLoading = false;
           this.messageService.add({
             severity: 'error',
             summary: 'Erro',
@@ -115,7 +119,7 @@ export class LoginComponent implements OnInit {
   private getFieldLabel(fieldName: string): string {
     const labels: { [key: string]: string } = {
       email: 'Email',
-      password: 'Senha'
+      senha: 'Senha'
     };
     return labels[fieldName] || fieldName;
   }

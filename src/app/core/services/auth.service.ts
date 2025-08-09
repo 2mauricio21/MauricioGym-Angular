@@ -26,7 +26,7 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
   public token$ = this.tokenSubject.asObservable();
   
-  private readonly apiUrl = environment.apiUrls.usuario;
+  private readonly apiUrl = environment.apiUrls.auth;
 
   constructor(
     private http: HttpClient,
@@ -70,14 +70,13 @@ export class AuthService {
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.http
-      .post<LoginResponse>(`${this.apiUrl}/auth/login`, credentials)
+      .post<LoginResponse>(`${this.apiUrl}${environment.auth.loginEndpoint}`, credentials)
       .pipe(
         tap(response => {
-          if (response.token) {
-            // Para RefreshTokenResponse, precisamos buscar o usuário atual
-            const currentUser = this.getCurrentUser();
-            if (currentUser) {
-              this.setAuthData(response.token, currentUser);
+          if (response.token && response.user) {
+            this.setAuthData(response.token, response.user);
+            if (response.refreshToken) {
+              localStorage.setItem(environment.auth.refreshTokenKey, response.refreshToken);
             }
           }
         }),
@@ -90,7 +89,7 @@ export class AuthService {
 
   register(userData: RegisterRequest): Observable<any> {
     return this.http
-      .post(`${this.apiUrl}/auth/register`, userData)
+      .post(`${this.apiUrl}/register`, userData)
       .pipe(
         catchError(error => {
           console.error('Erro no registro:', error);
@@ -100,7 +99,7 @@ export class AuthService {
   }
 
   refreshToken(): Observable<RefreshTokenResponse> {
-    const refreshToken = localStorage.getItem('mauriciogym_refresh_token');
+    const refreshToken = localStorage.getItem(environment.auth.refreshTokenKey);
     
     if (!refreshToken) {
       return throwError(() => new Error('Refresh token não encontrado'));
@@ -109,13 +108,16 @@ export class AuthService {
     const request: RefreshTokenRequest = { refreshToken };
     
     return this.http
-      .post<RefreshTokenResponse>(`${this.apiUrl}/auth/refresh`, request)
+      .post<RefreshTokenResponse>(`${this.apiUrl}${environment.auth.refreshEndpoint}`, request)
       .pipe(
         tap(response => {
           if (response.token) {
             const currentUser = this.getCurrentUser();
             if (currentUser) {
               this.setAuthData(response.token, currentUser);
+            }
+            if (response.refreshToken) {
+              localStorage.setItem(environment.auth.refreshTokenKey, response.refreshToken);
             }
           }
         }),
@@ -129,7 +131,7 @@ export class AuthService {
 
   changePassword(request: ChangePasswordRequest): Observable<any> {
     return this.http
-      .post(`${this.apiUrl}/auth/change-password`, request)
+      .post(`${this.apiUrl}/change-password`, request)
       .pipe(
         catchError(error => {
           console.error('Erro ao alterar senha:', error);
@@ -140,7 +142,7 @@ export class AuthService {
 
   resetPassword(request: ResetPasswordRequest): Observable<any> {
     return this.http
-      .post(`${this.apiUrl}/auth/reset-password`, request)
+      .post(`${this.apiUrl}/reset-password`, request)
       .pipe(
         catchError(error => {
           console.error('Erro ao resetar senha:', error);
@@ -151,7 +153,7 @@ export class AuthService {
 
   forgotPassword(email: string): Observable<any> {
     return this.http
-      .post(`${this.apiUrl}/auth/forgot-password`, { email })
+      .post(`${this.apiUrl}/forgot-password`, { email })
       .pipe(
         catchError(error => {
           console.error('Erro ao solicitar recuperação de senha:', error);
@@ -162,7 +164,7 @@ export class AuthService {
 
   resetPasswordConfirm(request: ResetPasswordConfirmRequest): Observable<any> {
     return this.http
-      .post(`${this.apiUrl}/auth/reset-password-confirm`, request)
+      .post(`${this.apiUrl}/reset-password-confirm`, request)
       .pipe(
         catchError(error => {
           console.error('Erro ao confirmar redefinição de senha:', error);
@@ -179,7 +181,7 @@ export class AuthService {
     }
 
     return this.http
-      .get<any>(`${this.apiUrl}/auth/validate`)
+      .get<any>(`${this.apiUrl}/validate`)
       .pipe(
         map(response => {
           if (response.success && response.data) {
@@ -199,7 +201,7 @@ export class AuthService {
     // Limpar dados do localStorage
     localStorage.removeItem(environment.auth.tokenKey);
     localStorage.removeItem('mauriciogym_user');
-    localStorage.removeItem('mauriciogym_refresh_token');
+    localStorage.removeItem(environment.auth.refreshTokenKey);
     
     // Limpar subjects
     this.currentUserSubject.next(null);
