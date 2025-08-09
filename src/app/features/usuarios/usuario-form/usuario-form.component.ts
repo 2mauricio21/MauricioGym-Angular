@@ -2,6 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { CardModule } from 'primeng/card';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ButtonModule } from 'primeng/button';
+import { DropdownModule } from 'primeng/dropdown';
+import { CalendarModule } from 'primeng/calendar';
+import { InputMaskModule } from 'primeng/inputmask';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 interface Usuario {
   id?: number;
@@ -26,214 +35,237 @@ interface Usuario {
 @Component({
   selector: 'app-usuario-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule,
+    CardModule,
+    InputTextModule,
+    InputTextareaModule,
+    ButtonModule,
+    DropdownModule,
+    CalendarModule,
+    InputMaskModule,
+    ToastModule
+  ],
+  providers: [MessageService],
   template: `
     <div class="container mx-auto p-6">
       <div class="max-w-4xl mx-auto">
-        <div class="flex items-center justify-between mb-6">
-          <div class="flex items-center">
-            <button 
-              (click)="voltar()"
-              class="mr-4 text-gray-600 hover:text-gray-800">
-              ← Voltar
-            </button>
-            <h1 class="text-2xl font-bold">{{ isEdicao ? 'Editar Usuário' : 'Novo Usuário' }}</h1>
+        <div class="flex align-items-center justify-content-between mb-6">
+          <div class="flex align-items-center">
+            <p-button 
+              icon="pi pi-arrow-left"
+              (onClick)="voltar()"
+              styleClass="p-button-text p-button-plain mr-3"
+              pTooltip="Voltar">
+            </p-button>
+            <h1 class="text-3xl font-bold text-900 m-0">{{ isEdicao ? 'Editar Usuário' : 'Novo Usuário' }}</h1>
           </div>
         </div>
 
-        <form [formGroup]="usuarioForm" (ngSubmit)="onSubmit()" class="space-y-6">
+        <form [formGroup]="usuarioForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-4">
           <!-- Informações Pessoais -->
-          <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-lg font-semibold mb-4">Informações Pessoais</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="md:col-span-2">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Nome Completo *</label>
+          <p-card header="Informações Pessoais">
+            <div class="grid">
+              <div class="col-12">
+                <label class="block text-900 font-medium mb-2">Nome Completo *</label>
                 <input 
+                  pInputText
                   type="text" 
                   formControlName="nome"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  [class.border-red-500]="usuarioForm.get('nome')?.invalid && usuarioForm.get('nome')?.touched">
-                <div *ngIf="usuarioForm.get('nome')?.invalid && usuarioForm.get('nome')?.touched" class="text-red-500 text-sm mt-1">
+                  class="w-full"
+                  [class.ng-invalid]="usuarioForm.get('nome')?.invalid && usuarioForm.get('nome')?.touched">
+                <small *ngIf="usuarioForm.get('nome')?.invalid && usuarioForm.get('nome')?.touched" class="p-error block">
                   Nome é obrigatório
-                </div>
+                </small>
               </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+              <div class="col-12 md:col-6">
+                <label class="block text-900 font-medium mb-2">Email *</label>
                 <input 
+                  pInputText
                   type="email" 
                   formControlName="email"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  [class.border-red-500]="usuarioForm.get('email')?.invalid && usuarioForm.get('email')?.touched">
-                <div *ngIf="usuarioForm.get('email')?.invalid && usuarioForm.get('email')?.touched" class="text-red-500 text-sm mt-1">
+                  class="w-full"
+                  [class.ng-invalid]="usuarioForm.get('email')?.invalid && usuarioForm.get('email')?.touched">
+                <small *ngIf="usuarioForm.get('email')?.invalid && usuarioForm.get('email')?.touched" class="p-error block">
                   <span *ngIf="usuarioForm.get('email')?.errors?.['required']">Email é obrigatório</span>
                   <span *ngIf="usuarioForm.get('email')?.errors?.['email']">Email inválido</span>
-                </div>
+                </small>
               </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Telefone *</label>
-                <input 
-                  type="tel" 
+              <div class="col-12 md:col-6">
+                <label class="block text-900 font-medium mb-2">Telefone *</label>
+                <p-inputMask 
+                  mask="(99) 99999-9999"
                   formControlName="telefone"
                   placeholder="(11) 99999-9999"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  [class.border-red-500]="usuarioForm.get('telefone')?.invalid && usuarioForm.get('telefone')?.touched">
-                <div *ngIf="usuarioForm.get('telefone')?.invalid && usuarioForm.get('telefone')?.touched" class="text-red-500 text-sm mt-1">
+                  styleClass="w-full"
+                  [class.ng-invalid]="usuarioForm.get('telefone')?.invalid && usuarioForm.get('telefone')?.touched">
+                </p-inputMask>
+                <small *ngIf="usuarioForm.get('telefone')?.invalid && usuarioForm.get('telefone')?.touched" class="p-error block">
                   Telefone é obrigatório
-                </div>
+                </small>
               </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">CPF *</label>
-                <input 
-                  type="text" 
+              <div class="col-12 md:col-6">
+                <label class="block text-900 font-medium mb-2">CPF *</label>
+                <p-inputMask 
+                  mask="999.999.999-99"
                   formControlName="cpf"
                   placeholder="000.000.000-00"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  [class.border-red-500]="usuarioForm.get('cpf')?.invalid && usuarioForm.get('cpf')?.touched">
-                <div *ngIf="usuarioForm.get('cpf')?.invalid && usuarioForm.get('cpf')?.touched" class="text-red-500 text-sm mt-1">
+                  styleClass="w-full"
+                  [class.ng-invalid]="usuarioForm.get('cpf')?.invalid && usuarioForm.get('cpf')?.touched">
+                </p-inputMask>
+                <small *ngIf="usuarioForm.get('cpf')?.invalid && usuarioForm.get('cpf')?.touched" class="p-error block">
                   CPF é obrigatório
-                </div>
+                </small>
               </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Data de Nascimento *</label>
-                <input 
-                  type="date" 
+              <div class="col-12 md:col-6">
+                <label class="block text-900 font-medium mb-2">Data de Nascimento *</label>
+                <p-calendar 
                   formControlName="dataNascimento"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  [class.border-red-500]="usuarioForm.get('dataNascimento')?.invalid && usuarioForm.get('dataNascimento')?.touched">
-                <div *ngIf="usuarioForm.get('dataNascimento')?.invalid && usuarioForm.get('dataNascimento')?.touched" class="text-red-500 text-sm mt-1">
+                  dateFormat="dd/mm/yy"
+                  placeholder="dd/mm/aaaa"
+                  styleClass="w-full"
+                  [showIcon]="true"
+                  [class.ng-invalid]="usuarioForm.get('dataNascimento')?.invalid && usuarioForm.get('dataNascimento')?.touched">
+                </p-calendar>
+                <small *ngIf="usuarioForm.get('dataNascimento')?.invalid && usuarioForm.get('dataNascimento')?.touched" class="p-error block">
                   Data de nascimento é obrigatória
-                </div>
+                </small>
               </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                <select 
+              <div class="col-12 md:col-6">
+                <label class="block text-900 font-medium mb-2">Status</label>
+                <p-dropdown 
+                  [options]="statusOptions"
                   formControlName="ativo"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                  <option [value]="true">Ativo</option>
-                  <option [value]="false">Inativo</option>
-                </select>
+                  placeholder="Selecione o status"
+                  styleClass="w-full">
+                </p-dropdown>
               </div>
             </div>
-          </div>
+          </p-card>
 
           <!-- Endereço -->
-          <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-lg font-semibold mb-4">Endereço</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">CEP *</label>
-                <input 
-                  type="text" 
+          <p-card header="Endereço">
+            <div class="grid">
+              <div class="col-12 md:col-4">
+                <label class="block text-900 font-medium mb-2">CEP *</label>
+                <p-inputMask 
+                  mask="99999-999"
                   formControlName="cep"
                   placeholder="00000-000"
-                  (blur)="buscarCep()"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  [class.border-red-500]="usuarioForm.get('cep')?.invalid && usuarioForm.get('cep')?.touched">
-                <div *ngIf="usuarioForm.get('cep')?.invalid && usuarioForm.get('cep')?.touched" class="text-red-500 text-sm mt-1">
+                  (onBlur)="buscarCep()"
+                  styleClass="w-full"
+                  [class.ng-invalid]="usuarioForm.get('cep')?.invalid && usuarioForm.get('cep')?.touched">
+                </p-inputMask>
+                <small *ngIf="usuarioForm.get('cep')?.invalid && usuarioForm.get('cep')?.touched" class="p-error block">
                   CEP é obrigatório
-                </div>
+                </small>
               </div>
-              <div class="md:col-span-2">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Logradouro *</label>
+              <div class="col-12 md:col-8">
+                <label class="block text-900 font-medium mb-2">Logradouro *</label>
                 <input 
+                  pInputText
                   type="text" 
                   formControlName="logradouro"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  [class.border-red-500]="usuarioForm.get('logradouro')?.invalid && usuarioForm.get('logradouro')?.touched">
-                <div *ngIf="usuarioForm.get('logradouro')?.invalid && usuarioForm.get('logradouro')?.touched" class="text-red-500 text-sm mt-1">
+                  class="w-full"
+                  [class.ng-invalid]="usuarioForm.get('logradouro')?.invalid && usuarioForm.get('logradouro')?.touched">
+                <small *ngIf="usuarioForm.get('logradouro')?.invalid && usuarioForm.get('logradouro')?.touched" class="p-error block">
                   Logradouro é obrigatório
-                </div>
+                </small>
               </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Número *</label>
+              <div class="col-12 md:col-3">
+                <label class="block text-900 font-medium mb-2">Número *</label>
                 <input 
+                  pInputText
                   type="text" 
                   formControlName="numero"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  [class.border-red-500]="usuarioForm.get('numero')?.invalid && usuarioForm.get('numero')?.touched">
-                <div *ngIf="usuarioForm.get('numero')?.invalid && usuarioForm.get('numero')?.touched" class="text-red-500 text-sm mt-1">
+                  class="w-full"
+                  [class.ng-invalid]="usuarioForm.get('numero')?.invalid && usuarioForm.get('numero')?.touched">
+                <small *ngIf="usuarioForm.get('numero')?.invalid && usuarioForm.get('numero')?.touched" class="p-error block">
                   Número é obrigatório
-                </div>
+                </small>
               </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Complemento</label>
+              <div class="col-12 md:col-3">
+                <label class="block text-900 font-medium mb-2">Complemento</label>
                 <input 
+                  pInputText
                   type="text" 
                   formControlName="complemento"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  class="w-full">
               </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Bairro *</label>
+              <div class="col-12 md:col-6">
+                <label class="block text-900 font-medium mb-2">Bairro *</label>
                 <input 
+                  pInputText
                   type="text" 
                   formControlName="bairro"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  [class.border-red-500]="usuarioForm.get('bairro')?.invalid && usuarioForm.get('bairro')?.touched">
-                <div *ngIf="usuarioForm.get('bairro')?.invalid && usuarioForm.get('bairro')?.touched" class="text-red-500 text-sm mt-1">
+                  class="w-full"
+                  [class.ng-invalid]="usuarioForm.get('bairro')?.invalid && usuarioForm.get('bairro')?.touched">
+                <small *ngIf="usuarioForm.get('bairro')?.invalid && usuarioForm.get('bairro')?.touched" class="p-error block">
                   Bairro é obrigatório
-                </div>
+                </small>
               </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Cidade *</label>
+              <div class="col-12 md:col-6">
+                <label class="block text-900 font-medium mb-2">Cidade *</label>
                 <input 
+                  pInputText
                   type="text" 
                   formControlName="cidade"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  [class.border-red-500]="usuarioForm.get('cidade')?.invalid && usuarioForm.get('cidade')?.touched">
-                <div *ngIf="usuarioForm.get('cidade')?.invalid && usuarioForm.get('cidade')?.touched" class="text-red-500 text-sm mt-1">
+                  class="w-full"
+                  [class.ng-invalid]="usuarioForm.get('cidade')?.invalid && usuarioForm.get('cidade')?.touched">
+                <small *ngIf="usuarioForm.get('cidade')?.invalid && usuarioForm.get('cidade')?.touched" class="p-error block">
                   Cidade é obrigatória
-                </div>
+                </small>
               </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Estado *</label>
-                <select 
+              <div class="col-12 md:col-6">
+                <label class="block text-900 font-medium mb-2">Estado *</label>
+                <p-dropdown 
+                  [options]="estadoOptions"
                   formControlName="estado"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  [class.border-red-500]="usuarioForm.get('estado')?.invalid && usuarioForm.get('estado')?.touched">
-                  <option value="">Selecione o estado</option>
-                  <option value="SP">São Paulo</option>
-                  <option value="RJ">Rio de Janeiro</option>
-                  <option value="MG">Minas Gerais</option>
-                  <!-- Adicionar outros estados conforme necessário -->
-                </select>
-                <div *ngIf="usuarioForm.get('estado')?.invalid && usuarioForm.get('estado')?.touched" class="text-red-500 text-sm mt-1">
+                  placeholder="Selecione o estado"
+                  styleClass="w-full"
+                  [class.ng-invalid]="usuarioForm.get('estado')?.invalid && usuarioForm.get('estado')?.touched">
+                </p-dropdown>
+                <small *ngIf="usuarioForm.get('estado')?.invalid && usuarioForm.get('estado')?.touched" class="p-error block">
                   Estado é obrigatório
-                </div>
+                </small>
               </div>
             </div>
-          </div>
+          </p-card>
 
           <!-- Observações -->
-          <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-lg font-semibold mb-4">Observações</h2>
+          <p-card header="Observações">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Observações</label>
+              <label class="block text-900 font-medium mb-2">Observações</label>
               <textarea 
+                pInputTextarea
                 formControlName="observacoes"
                 rows="4"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full"
                 placeholder="Observações adicionais sobre o usuário..."></textarea>
             </div>
-          </div>
+          </p-card>
 
           <!-- Botões -->
-          <div class="flex justify-end space-x-4">
-            <button 
-              type="button"
-              (click)="voltar()"
-              class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
-              Cancelar
-            </button>
-            <button 
+          <div class="flex justify-content-end gap-3">
+            <p-button 
+              label="Cancelar"
+              icon="pi pi-times"
+              styleClass="p-button-outlined"
+              (onClick)="voltar()">
+            </p-button>
+            <p-button 
+              [label]="isEdicao ? 'Atualizar Usuário' : 'Criar Usuário'"
+              icon="pi pi-check"
               type="submit"
-              [disabled]="usuarioForm.invalid"
-              class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400">
-              {{ isEdicao ? 'Atualizar' : 'Criar' }} Usuário
-            </button>
+              [disabled]="usuarioForm.invalid">
+            </p-button>
           </div>
         </form>
       </div>
     </div>
+    
+    <p-toast></p-toast>
   `
 })
 export class UsuarioFormComponent implements OnInit {
@@ -241,10 +273,46 @@ export class UsuarioFormComponent implements OnInit {
   isEdicao = false;
   usuarioId?: number;
 
+  statusOptions = [
+    { label: 'Ativo', value: true },
+    { label: 'Inativo', value: false }
+  ];
+
+  estadoOptions = [
+    { label: 'Acre', value: 'AC' },
+    { label: 'Alagoas', value: 'AL' },
+    { label: 'Amapá', value: 'AP' },
+    { label: 'Amazonas', value: 'AM' },
+    { label: 'Bahia', value: 'BA' },
+    { label: 'Ceará', value: 'CE' },
+    { label: 'Distrito Federal', value: 'DF' },
+    { label: 'Espírito Santo', value: 'ES' },
+    { label: 'Goiás', value: 'GO' },
+    { label: 'Maranhão', value: 'MA' },
+    { label: 'Mato Grosso', value: 'MT' },
+    { label: 'Mato Grosso do Sul', value: 'MS' },
+    { label: 'Minas Gerais', value: 'MG' },
+    { label: 'Pará', value: 'PA' },
+    { label: 'Paraíba', value: 'PB' },
+    { label: 'Paraná', value: 'PR' },
+    { label: 'Pernambuco', value: 'PE' },
+    { label: 'Piauí', value: 'PI' },
+    { label: 'Rio de Janeiro', value: 'RJ' },
+    { label: 'Rio Grande do Norte', value: 'RN' },
+    { label: 'Rio Grande do Sul', value: 'RS' },
+    { label: 'Rondônia', value: 'RO' },
+    { label: 'Roraima', value: 'RR' },
+    { label: 'Santa Catarina', value: 'SC' },
+    { label: 'São Paulo', value: 'SP' },
+    { label: 'Sergipe', value: 'SE' },
+    { label: 'Tocantins', value: 'TO' }
+  ];
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private messageService: MessageService
   ) {
     this.usuarioForm = this.fb.group({
       nome: ['', Validators.required],
@@ -360,12 +428,30 @@ export class UsuarioFormComponent implements OnInit {
       if (this.isEdicao) {
         // TODO: Implementar atualização via API
         console.log('Atualizando usuário:', usuario);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: 'Usuário atualizado com sucesso!'
+        });
       } else {
         // TODO: Implementar criação via API
         console.log('Criando usuário:', usuario);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: 'Usuário criado com sucesso!'
+        });
       }
 
-      this.voltar();
+      setTimeout(() => {
+        this.voltar();
+      }, 1500);
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Erro',
+        detail: 'Por favor, preencha todos os campos obrigatórios.'
+      });
     }
   }
 

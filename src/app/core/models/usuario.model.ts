@@ -34,7 +34,8 @@ export enum StatusUsuario {
   Suspenso = 'Suspenso'
 }
 
-export interface CreateUsuarioRequest {
+// Request Entities - seguindo padrão do backend
+export interface IncluirUsuarioRequestEntity {
   nome: string;
   sobrenome: string;
   email: string;
@@ -47,10 +48,9 @@ export interface CreateUsuarioRequest {
   estado: string;
   cep: string;
   ativo?: boolean;
-  observacoes?: string;
 }
 
-export interface UpdateUsuarioRequest {
+export interface AlterarUsuarioRequestEntity {
   idUsuario: number;
   nome: string;
   sobrenome: string;
@@ -64,5 +64,42 @@ export interface UpdateUsuarioRequest {
   estado: string;
   cep: string;
   ativo: boolean;
+}
+
+export interface ConsultarUsuarioRequestEntity {
+  idUsuario: number;
+}
+
+export interface ExcluirUsuarioRequestEntity {
+  idUsuario: number;
+}
+
+// Response Entities - seguindo padrão do backend
+export interface UsuarioResponseEntity {
+  idUsuario: number;
+  nome: string;
+  sobrenome: string;
+  email: string;
+  cpf: string;
+  telefone: string;
+  dataNascimento?: Date;
+  endereco: string;
+  cidade: string;
+  estado: string;
+  cep: string;
+  ativo: boolean;
+  dataCadastro: Date;
+  dataUltimoLogin?: Date;
+  nomeCompleto?: string;
+  tipoUsuario?: TipoUsuario;
+  statusUsuario?: StatusUsuario;
+}
+
+// Interfaces de compatibilidade (manter para não quebrar código existente)
+export interface CreateUsuarioRequest extends IncluirUsuarioRequestEntity {
+  observacoes?: string;
+}
+
+export interface UpdateUsuarioRequest extends AlterarUsuarioRequestEntity {
   observacoes?: string;
 }

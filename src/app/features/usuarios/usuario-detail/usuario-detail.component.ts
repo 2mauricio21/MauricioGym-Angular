@@ -1,6 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { TagModule } from 'primeng/tag';
+import { TableModule } from 'primeng/table';
+import { SkeletonModule } from 'primeng/skeleton';
+import { AvatarModule } from 'primeng/avatar';
+import { TooltipModule } from 'primeng/tooltip';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { MessageService } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 
 interface Usuario {
   id: number;
@@ -49,53 +60,86 @@ interface HistoricoAcesso {
 @Component({
   selector: 'app-usuario-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [
+    CommonModule, 
+    RouterModule,
+    CardModule,
+    ButtonModule,
+    TagModule,
+    TableModule,
+    SkeletonModule,
+    AvatarModule,
+    TooltipModule,
+    ToastModule,
+    ConfirmDialogModule
+  ],
+  providers: [MessageService, ConfirmationService],
   template: `
     <div class="container mx-auto p-6">
       <div class="max-w-6xl mx-auto">
         <div class="flex items-center justify-between mb-6">
-          <div class="flex items-center">
-            <button 
-              (click)="voltar()"
-              class="mr-4 text-gray-600 hover:text-gray-800">
-              ← Voltar
-            </button>
+          <div class="flex items-center space-x-4">
+            <p-button 
+              (onClick)="voltar()"
+              icon="pi pi-arrow-left"
+              label="Voltar"
+              severity="secondary"
+              size="small">
+            </p-button>
             <h1 class="text-2xl font-bold text-gray-900">Detalhes do Usuário</h1>
           </div>
-          <div class="flex space-x-3">
-            <button 
-              [routerLink]="['/usuarios', usuario?.id, 'editar']"
-              class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium">
-              Editar
-            </button>
-            <button 
-              (click)="toggleStatus()"
-              [class]="usuario?.ativo ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'"
-              class="text-white px-4 py-2 rounded-lg font-medium">
-              {{ usuario?.ativo ? 'Desativar' : 'Ativar' }}
-            </button>
+          <div class="flex space-x-3" *ngIf="usuario">
+            <p-button 
+              [routerLink]="['/usuarios/editar', usuario.id]"
+              icon="pi pi-pencil"
+              label="Editar"
+              severity="info">
+            </p-button>
+            <p-button 
+              (onClick)="confirmarAlteracaoStatus()"
+              [icon]="usuario.ativo ? 'pi pi-times' : 'pi pi-check'"
+              [label]="usuario.ativo ? 'Desativar' : 'Ativar'"
+              [severity]="usuario.ativo ? 'danger' : 'success'">
+            </p-button>
           </div>
         </div>
 
-        <div *ngIf="loading" class="text-center py-8">
-          <p class="text-gray-500">Carregando dados do usuário...</p>
+        <div *ngIf="loading" class="space-y-6">
+          <p-card>
+            <div class="flex items-center space-x-4 mb-6">
+              <p-skeleton shape="circle" size="4rem"></p-skeleton>
+              <div class="space-y-2">
+                <p-skeleton width="8rem" height="1rem"></p-skeleton>
+                <p-skeleton width="6rem" height="0.75rem"></p-skeleton>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <p-skeleton height="1rem"></p-skeleton>
+              <p-skeleton height="1rem"></p-skeleton>
+              <p-skeleton height="1rem"></p-skeleton>
+            </div>
+          </p-card>
         </div>
 
         <div *ngIf="!loading && usuario" class="space-y-6">
           <!-- Informações Básicas -->
-          <div class="bg-white rounded-lg shadow p-6">
+          <p-card>
             <div class="flex items-start justify-between mb-4">
               <div class="flex items-center">
-                <div class="h-16 w-16 rounded-full bg-gray-300 flex items-center justify-center mr-4">
-                  <span class="text-xl font-bold text-gray-700">{{ getInitials(usuario.nome) }}</span>
-                </div>
+                <p-avatar 
+                  [label]="getInitials(usuario.nome)"
+                  size="xlarge"
+                  shape="circle"
+                  styleClass="bg-blue-500 text-white mr-4">
+                </p-avatar>
                 <div>
                   <h2 class="text-xl font-bold text-gray-900">{{ usuario.nome }}</h2>
                   <p class="text-gray-600">{{ usuario.email }}</p>
-                  <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full mt-1"
-                        [class]="getStatusClass(usuario.ativo)">
-                    {{ usuario.ativo ? 'Ativo' : 'Inativo' }}
-                  </span>
+                  <p-tag 
+                    [value]="usuario.ativo ? 'Ativo' : 'Inativo'"
+                    [severity]="usuario.ativo ? 'success' : 'danger'"
+                    styleClass="mt-1">
+                  </p-tag>
                 </div>
               </div>
             </div>
@@ -114,11 +158,15 @@ interface HistoricoAcesso {
                 <p class="mt-1 text-sm text-gray-900">{{ usuario.dataNascimento | date:'dd/MM/yyyy' }}</p>
               </div>
             </div>
-          </div>
+          </p-card>
 
           <!-- Plano Atual -->
-          <div class="bg-white rounded-lg shadow p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Plano Atual</h3>
+          <p-card>
+            <ng-template pTemplate="header">
+              <div class="p-4">
+                <h3 class="text-lg font-semibold text-gray-900 m-0">Plano Atual</h3>
+              </div>
+            </ng-template>
             <div *ngIf="usuario.planoAtual; else semPlano">
               <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
@@ -135,45 +183,53 @@ interface HistoricoAcesso {
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-500">Valor Mensal</label>
-                  <p class="mt-1 text-sm font-semibold text-green-600">{{ usuario.planoAtual.valor | currency:'BRL' }}</p>
+                  <p class="mt-1 text-sm font-semibold text-green-600">{{ usuario.planoAtual.valor | currency:'BRL':'symbol':'1.2-2' }}</p>
                 </div>
               </div>
             </div>
             <ng-template #semPlano>
               <p class="text-gray-500 italic">Usuário não possui plano ativo</p>
             </ng-template>
-          </div>
+          </p-card>
 
           <!-- Estatísticas -->
-          <div class="bg-white rounded-lg shadow p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Estatísticas</h3>
+          <p-card>
+            <ng-template pTemplate="header">
+              <div class="p-4">
+                <h3 class="text-lg font-semibold text-gray-900 m-0">Estatísticas</h3>
+              </div>
+            </ng-template>
             <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
               <div class="text-center">
-                <div class="text-2xl font-bold text-blue-600">{{ usuario.estatisticas.totalAcessos }}</div>
-                <div class="text-sm text-gray-500">Total de Acessos</div>
+                <p class="text-2xl font-bold text-blue-600">{{ usuario.estatisticas.totalAcessos }}</p>
+                <p class="text-sm text-gray-500">Total de Acessos</p>
               </div>
               <div class="text-center">
-                <div class="text-2xl font-bold text-green-600">{{ usuario.estatisticas.diasAtivo }}</div>
-                <div class="text-sm text-gray-500">Dias Ativo</div>
+                <p class="text-2xl font-bold text-green-600">{{ usuario.estatisticas.diasAtivo }}</p>
+                <p class="text-sm text-gray-500">Dias Ativo</p>
               </div>
               <div class="text-center">
-                <div class="text-2xl font-bold text-purple-600">{{ usuario.estatisticas.pagamentosRealizados }}</div>
-                <div class="text-sm text-gray-500">Pagamentos</div>
+                <p class="text-2xl font-bold text-purple-600">{{ usuario.estatisticas.pagamentosRealizados }}</p>
+                <p class="text-sm text-gray-500">Pagamentos</p>
               </div>
               <div class="text-center">
-                <div class="text-2xl font-bold text-yellow-600">{{ usuario.estatisticas.valorTotalPago | currency:'BRL' }}</div>
-                <div class="text-sm text-gray-500">Total Pago</div>
+                <p class="text-2xl font-bold text-orange-600">{{ usuario.estatisticas.valorTotalPago | currency:'BRL':'symbol':'1.2-2' }}</p>
+                <p class="text-sm text-gray-500">Total Pago</p>
               </div>
               <div class="text-center">
-                <div class="text-2xl font-bold text-gray-600">{{ usuario.estatisticas.ultimoAcesso | date:'dd/MM' }}</div>
-                <div class="text-sm text-gray-500">Último Acesso</div>
+                <p class="text-sm font-medium text-gray-900">{{ usuario.estatisticas.ultimoAcesso | date:'dd/MM/yyyy HH:mm' }}</p>
+                <p class="text-sm text-gray-500">Último Acesso</p>
               </div>
             </div>
-          </div>
+          </p-card>
 
           <!-- Endereço -->
-          <div class="bg-white rounded-lg shadow p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Endereço</h3>
+          <p-card>
+            <ng-template pTemplate="header">
+              <div class="p-4">
+                <h3 class="text-lg font-semibold text-gray-900 m-0">Endereço</h3>
+              </div>
+            </ng-template>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label class="block text-sm font-medium text-gray-500">CEP</label>
@@ -196,52 +252,74 @@ interface HistoricoAcesso {
                 <p class="mt-1 text-sm text-gray-900">{{ usuario.endereco.cidade }}/{{ usuario.endereco.estado }}</p>
               </div>
             </div>
-          </div>
+          </p-card>
 
           <!-- Observações -->
-          <div class="bg-white rounded-lg shadow p-6" *ngIf="usuario.observacoes">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Observações</h3>
+          <p-card *ngIf="usuario.observacoes">
+            <ng-template pTemplate="header">
+              <div class="p-4">
+                <h3 class="text-lg font-semibold text-gray-900 m-0">Observações</h3>
+              </div>
+            </ng-template>
             <p class="text-sm text-gray-700">{{ usuario.observacoes }}</p>
-          </div>
+          </p-card>
 
           <!-- Histórico de Acessos Recentes -->
-          <div class="bg-white rounded-lg shadow p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Acessos Recentes</h3>
-            <div class="overflow-x-auto">
-              <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                  <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data/Hora</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Academia</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Equipamento</th>
-                  </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                  <tr *ngFor="let acesso of historicoAcessos">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {{ acesso.dataHora | date:'dd/MM/yyyy HH:mm' }}
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {{ acesso.academia }}
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <span [class]="acesso.tipo === 'entrada' ? 'inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800' : 'inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800'">
-                        {{ acesso.tipo === 'entrada' ? 'Entrada' : 'Saída' }}
-                      </span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {{ acesso.equipamento || '-' }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <p-card>
+            <ng-template pTemplate="header">
+              <div class="p-4">
+                <h3 class="text-lg font-semibold text-gray-900 m-0">Acessos Recentes</h3>
+              </div>
+            </ng-template>
+            <p-table 
+              [value]="historicoAcessos"
+              [paginator]="true"
+              [rows]="5"
+              [showCurrentPageReport]="true"
+              currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+              [rowsPerPageOptions]="[5, 10, 20]"
+              styleClass="p-datatable-sm">
+              
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Data/Hora</th>
+                  <th>Academia</th>
+                  <th>Tipo</th>
+                  <th>Equipamento</th>
+                </tr>
+              </ng-template>
+              
+              <ng-template pTemplate="body" let-acesso>
+                <tr>
+                  <td>{{ acesso.dataHora | date:'dd/MM/yyyy HH:mm' }}</td>
+                  <td>{{ acesso.academia }}</td>
+                  <td>
+                    <p-tag 
+                      [value]="acesso.tipo === 'entrada' ? 'Entrada' : 'Saída'"
+                      [severity]="acesso.tipo === 'entrada' ? 'success' : 'danger'">
+                    </p-tag>
+                  </td>
+                  <td>{{ acesso.equipamento || '-' }}</td>
+                </tr>
+              </ng-template>
+              
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="4" class="text-center py-4">
+                    <p class="text-gray-500">Nenhum acesso encontrado</p>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </p-card>
 
           <!-- Informações de Auditoria -->
-          <div class="bg-white rounded-lg shadow p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Informações de Auditoria</h3>
+          <p-card>
+            <ng-template pTemplate="header">
+              <div class="p-4">
+                <h3 class="text-lg font-semibold text-gray-900 m-0">Informações de Auditoria</h3>
+              </div>
+            </ng-template>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label class="block text-sm font-medium text-gray-500">Data de Cadastro</label>
@@ -252,7 +330,7 @@ interface HistoricoAcesso {
                 <p class="mt-1 text-sm text-gray-900">{{ usuario.dataAtualizacao | date:'dd/MM/yyyy HH:mm' }}</p>
               </div>
             </div>
-          </div>
+          </p-card>
         </div>
 
         <div *ngIf="!loading && !usuario" class="text-center py-8">
@@ -260,6 +338,10 @@ interface HistoricoAcesso {
         </div>
       </div>
     </div>
+    
+    <!-- Toast e ConfirmDialog -->
+    <p-toast></p-toast>
+    <p-confirmDialog></p-confirmDialog>
   `
 })
 export class UsuarioDetailComponent implements OnInit {
@@ -270,7 +352,9 @@ export class UsuarioDetailComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit(): void {
@@ -359,10 +443,37 @@ export class UsuarioDetailComponent implements OnInit {
       : 'bg-red-100 text-red-800';
   }
 
+  confirmarAlteracaoStatus(): void {
+    if (!this.usuario) return;
+
+    const novoStatus = !this.usuario.ativo;
+    const acao = novoStatus ? 'ativar' : 'desativar';
+    
+    this.confirmationService.confirm({
+      message: `Tem certeza que deseja ${acao} este usuário?`,
+      header: 'Confirmação',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sim',
+      rejectLabel: 'Não',
+      accept: () => {
+        this.toggleStatus();
+      }
+    });
+  }
+
   toggleStatus(): void {
     if (this.usuario) {
-      // TODO: Implementar alteração de status via API
+      const statusAnterior = this.usuario.ativo;
       this.usuario.ativo = !this.usuario.ativo;
+      
+      // TODO: Implementar alteração de status via API
+      // Simulando sucesso
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Sucesso',
+        detail: `Usuário ${this.usuario.ativo ? 'ativado' : 'desativado'} com sucesso!`
+      });
+      
       console.log(`Status do usuário alterado para: ${this.usuario.ativo ? 'Ativo' : 'Inativo'}`);
     }
   }
